@@ -95,7 +95,7 @@ php artisan key:generate
 
 You can use MySQL or SQLite.
 
-#### Option A: MySQL
+#### Option A: ( Only if we use MySQL)
 
 1. Open XAMPP Control Panel.
 2. Start Apache and MySQL.
