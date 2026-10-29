@@ -7,26 +7,39 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Local setup
+## Clone and run locally (Windows/XAMPP)
 
-After cloning the project, run these commands from the project directory:
+Open PowerShell and clone the `dev-pronoy` branch:
+
+```powershell
+git clone --branch dev-pronoy --single-branch https://github.com/PronoyPramanick/suraksha-disaster-management-system.git
+cd suraksha-disaster-management-system
+```
+
+Install the project dependencies and prepare its environment and SQLite database:
 
 ```powershell
 composer install
-Copy-Item .env.example .env
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 php artisan key:generate
+if (-not (Test-Path database/database.sqlite)) { New-Item -ItemType File database/database.sqlite }
 php artisan migrate --seed
 npm install
 npm run build
+```
+
+Start the Laravel development server:
+
+```powershell
 php artisan serve
 ```
+
+Open the URL shown in the terminal (usually `http://127.0.0.1:8000`). This project uses SQLite by default, so XAMPP's Apache and MySQL services do not need to be started. Run the commands with XAMPP's PHP and Composer available in PowerShell's `PATH`. To rebuild frontend assets while developing, use `npm run dev` in a second terminal.
 
 The database seeder creates the administrator account:
 
 - Email: `admin@gmail.com`
 - Password: `12345678`
-
-For a fresh clone, `Copy-Item` creates `.env`. If `.env` already exists, keep it and skip that command.
 
 ## About Laravel
 
