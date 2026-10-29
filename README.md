@@ -7,6 +7,27 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Local setup
+
+After cloning the project, run these commands from the project directory:
+
+```powershell
+composer install
+Copy-Item .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+npm install
+npm run build
+php artisan serve
+```
+
+The database seeder creates the administrator account:
+
+- Email: `admin@gmail.com`
+- Password: `12345678`
+
+For a fresh clone, `Copy-Item` creates `.env`. If `.env` already exists, keep it and skip that command.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
