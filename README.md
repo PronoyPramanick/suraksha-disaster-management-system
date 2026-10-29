@@ -7,18 +7,13 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Clone and run locally (Windows/XAMPP)
+## PowerShell-এ clone করে চালানো (Windows/XAMPP)
 
-Open PowerShell and clone the `dev-pronoy` branch:
+PowerShell খুলে নিচের command-গুলো একে একে চালান। Private repository হলে GitHub-এ access থাকা account দিয়ে sign in করতে হবে।
 
 ```powershell
 git clone --branch dev-pronoy --single-branch https://github.com/PronoyPramanick/suraksha-disaster-management-system.git
 cd suraksha-disaster-management-system
-```
-
-Install the project dependencies and prepare its environment and SQLite database:
-
-```powershell
 composer install
 if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 php artisan key:generate
@@ -26,15 +21,10 @@ if (-not (Test-Path database/database.sqlite)) { New-Item -ItemType File databas
 php artisan migrate --seed
 npm install
 npm run build
-```
-
-Start the Laravel development server:
-
-```powershell
 php artisan serve
 ```
 
-Open the URL shown in the terminal (usually `http://127.0.0.1:8000`). This project uses SQLite by default, so XAMPP's Apache and MySQL services do not need to be started. Run the commands with XAMPP's PHP and Composer available in PowerShell's `PATH`. To rebuild frontend assets while developing, use `npm run dev` in a second terminal.
+`php artisan serve` চালু থাকলে browser-এ **http://127.0.0.1:8000** খুলুন। Laravel অন্য কোনো port দেখালে terminal-এ দেখানো URL ব্যবহার করুন। এই project SQLite database ব্যবহার করে, তাই XAMPP-এর Apache বা MySQL start করতে হবে না; PowerShell-এ PHP, Composer, Node.js ও npm command পাওয়া যেতে হবে। Frontend development mode-এ চালাতে আরেকটি PowerShell খুলে project folder-এ `npm run dev` চালান।
 
 The database seeder creates the administrator account:
 
