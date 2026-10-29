@@ -1,8 +1,8 @@
-# ACDIP – Adaptive Community Disaster Intelligence Platform
+# SURAKSHA – Adaptive Community Disaster Intelligence Platform
 
 ## 📌 Project Description
 
-ACDIP is a web-based disaster management platform designed to support disaster preparedness, emergency response, rescue coordination, and relief management in Bangladesh.
+SURAKSHA is a web-based disaster management platform designed to support disaster preparedness, emergency response, rescue coordination, and relief management in Bangladesh.
 
 The platform helps citizens access disaster alerts, submit rescue requests, locate emergency shelters, find safety guidelines, and access important emergency information. Administrators can manage disaster information, rescue operations, volunteers, shelters, and relief resources.
 
@@ -235,4 +235,4 @@ Collaborators must have the appropriate GitHub repository permissions to push ch
 
 ## 🎯 Project Goal
 
-The goal of ACDIP is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized platform for disaster management in Bangladesh.
+The goal of SURAKSHA is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized platform for disaster management in Bangladesh.
