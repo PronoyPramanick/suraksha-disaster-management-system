@@ -7,9 +7,9 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## PowerShell-এ clone করে চালানো (Windows/XAMPP)
+## Clone and Run in PowerShell (Windows/XAMPP)
 
-PowerShell খুলে নিচের command-গুলো একে একে চালান। Private repository হলে GitHub-এ access থাকা account দিয়ে sign in করতে হবে।
+Open PowerShell and run these commands one at a time. For this private repository, sign in with a GitHub account that has access.
 
 ```powershell
 git clone --branch dev-pronoy --single-branch https://github.com/PronoyPramanick/suraksha-disaster-management-system.git
@@ -24,7 +24,7 @@ npm run build
 php artisan serve
 ```
 
-`php artisan serve` চালু থাকলে browser-এ **http://127.0.0.1:8000** খুলুন। Laravel অন্য কোনো port দেখালে terminal-এ দেখানো URL ব্যবহার করুন। এই project SQLite database ব্যবহার করে, তাই XAMPP-এর Apache বা MySQL start করতে হবে না; PowerShell-এ PHP, Composer, Node.js ও npm command পাওয়া যেতে হবে। Frontend development mode-এ চালাতে আরেকটি PowerShell খুলে project folder-এ `npm run dev` চালান।
+With `php artisan serve` running, open **http://127.0.0.1:8000** in your browser. If Laravel displays a different port in the terminal, use that URL instead. This project uses SQLite, so you do not need to start XAMPP's Apache or MySQL services. PHP, Composer, Node.js, and npm must be available in PowerShell. To run the frontend in development mode, open a second PowerShell window, go to the project folder, and run `npm run dev`.
 
 The database seeder creates the administrator account:
 
