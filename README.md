@@ -1,80 +1,238 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ACDIP – Adaptive Community Disaster Intelligence Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📌 Project Description
 
-## Local setup
+ACDIP is a web-based disaster management platform designed to support disaster preparedness, emergency response, rescue coordination, and relief management in Bangladesh.
 
-After cloning the project, run these commands from the project directory:
+The platform helps citizens access disaster alerts, submit rescue requests, locate emergency shelters, find safety guidelines, and access important emergency information. Administrators can manage disaster information, rescue operations, volunteers, shelters, and relief resources.
+
+## 🛠️ Technologies Used
+
+- Programming Language: PHP, JavaScript, HTML5, CSS3
+- Backend Framework: Laravel
+- Frontend: Blade Templates, HTML, CSS, JavaScript
+- CSS Framework: Bootstrap
+- Database: MySQL / SQLite
+- ORM: Laravel Eloquent ORM
+- Development Tools: VS Code, Git, GitHub, Composer, Node.js, NPM
+- Local Server: XAMPP
+
+## ✨ Main Features
+
+- Disaster News and Alerts
+- Affected Area Information
+- Disaster Safety Guidelines
+- Emergency Helpline Directory
+- Rescue Request Submission and Tracking
+- Volunteer Registration and Approval
+- Volunteer Task Assignment
+- Missing Person Reports
+- Shelter Locator and Capacity Management
+- Shelter Facilities and Evacuation Information
+- Relief Resource Inventory
+- Donation Management
+- NGO and Medical Camp Directory
+- Disaster History Dashboard
+- Interactive Map of Bangladesh
+- Disaster Impact Assessment
+
+## 📋 Prerequisites
+
+Install the following software before running the project:
+
+1. PHP
+2. Composer
+3. Node.js and NPM
+4. XAMPP (if using MySQL locally)
+5. Git
+6. Visual Studio Code (recommended)
+
+Make sure your PHP version is compatible with the project's Laravel version.
+
+## 📥 Installation and Setup
+
+### Step 1: Clone the Repository
+
+Open your terminal and run:
+
+```bash
+git clone https://github.com/PronoyPramanick/disaster-management-system.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd disaster-management-system
+```
+
+### Step 2: Install PHP Dependencies
+
+Run:
+
+```bash
+composer install
+```
+
+### Step 3: Configure the Environment
+
+Create your local environment file.
+
+For Windows PowerShell:
 
 ```powershell
-composer install
 Copy-Item .env.example .env
+```
+
+Generate the application key:
+
+```bash
 php artisan key:generate
-php artisan migrate --seed
+```
+
+**Important:** Never upload your `.env` file to GitHub because it may contain sensitive information.
+
+### Step 4: Configure the Database
+
+You can use MySQL or SQLite.
+
+#### Option A: MySQL
+
+1. Open XAMPP Control Panel.
+2. Start Apache and MySQL.
+3. Open phpMyAdmin.
+4. Create a database named:
+
+```text
+disaster_management
+```
+
+5. Update the database settings in your `.env` file:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=disaster_management
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Adjust the username and password if your MySQL configuration is different.
+
+#### Option B: SQLite
+
+If the project is configured to use SQLite, follow the project's existing SQLite configuration instead. You do not need to create a MySQL database when using SQLite.
+
+### Step 5: Run Database Migrations
+
+Run:
+
+```bash
+php artisan migrate
+```
+
+This creates the database tables defined by the project's migrations.
+
+### Step 6: Install Frontend Dependencies
+
+Run:
+
+```bash
 npm install
-npm run build
+```
+
+For development, run:
+
+```bash
+npm run dev
+```
+
+Keep this terminal running while developing.
+
+### Step 7: Start the Laravel Server
+
+Open another terminal in the project directory and run:
+
+```bash
 php artisan serve
 ```
 
-The database seeder creates the administrator account:
+### Step 8: Open the Website
 
-- Email: `admin@gmail.com`
-- Password: `12345678`
+Open your browser and visit:
 
-For a fresh clone, `Copy-Item` creates `.env`. If `.env` already exists, keep it and skip that command.
+http://127.0.0.1:8000
 
-## About Laravel
+The Laravel application should now be accessible locally.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🔄 Useful Commands
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Check the PHP version:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+php --version
+```
 
-## Learning Laravel
+Check the Composer version:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+composer --version
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Check the Laravel application:
 
-## Laravel Sponsors
+```bash
+php artisan --version
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+List application routes:
 
-### Premium Partners
+```bash
+php artisan route:list
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Clear the application cache:
 
-## Contributing
+```bash
+php artisan optimize:clear
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Run database migrations:
 
-## Code of Conduct
+```bash
+php artisan migrate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Start the local server:
 
-## Security Vulnerabilities
+```bash
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 👥 Working with Group Members
 
-## License
+Each group member should clone the repository and install the required dependencies locally.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Every member must configure their own `.env` file and database.
+
+Do not share `.env` files containing passwords or secret keys through GitHub.
+
+Before pushing changes, run:
+
+```bash
+git pull origin main
+```
+
+After making changes, use:
+
+```bash
+git add .
+git commit -m "Describe your changes"
+git push origin main
+```
+
+Collaborators must have the appropriate GitHub repository permissions to push changes.
+
+## 🎯 Project Goal
+
+The goal of ACDIP is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized platform for disaster management in Bangladesh.
