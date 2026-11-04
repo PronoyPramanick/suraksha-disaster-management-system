@@ -79,7 +79,9 @@ body { margin: 0; min-width: 320px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
 
 /* Reference-matched disaster response sign-in */
-.auth-reference-layout { grid-template-columns: 58.7% 41.3%; background: #eff3f7 url('/images/suraksha-login-reference.png') center / 100% 100% no-repeat; }
+.auth-reference-layout { position: relative; grid-template-columns: 58.7% 41.3%; background: #eff3f7; }
+.auth-reference-background { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: fill; pointer-events: none; }
+.auth-reference-layout > .auth-story, .auth-reference-layout > .auth-panel { position: relative; z-index: 1; }
 .auth-reference-layout .auth-story { min-height: 100vh; padding: 0; background: transparent; }
 .auth-reference-layout .auth-story::before, .auth-reference-layout .auth-story::after { display: none; }
 .auth-reference-layout .hero-copy, .auth-reference-layout .hero-location { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
@@ -129,6 +131,7 @@ body { margin: 0; min-width: 320px; }
 }
 @media (max-width: 700px) {
     .auth-reference-layout { display: block; min-height: 100vh; background: #f5f8fc; }
+    .auth-reference-background { display: none; }
     .auth-reference-layout .auth-story { display: none; }
     .auth-reference-layout .auth-panel { min-height: 100vh; justify-content: flex-start; padding: 26px 20px 20px; background: radial-gradient(ellipse at 50% 0,#e1edf6 0,transparent 280px),#f7f9fc; }
     .auth-reference-layout .mobile-brand { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 500px; margin: 0 auto 28px; color: #122f4f; }
@@ -152,7 +155,8 @@ body { margin: 0; min-width: 320px; }
 
 /* Volunteer and citizen account registration */
 [x-cloak] { display: none !important; }
-.auth-register-layout { grid-template-columns: 58.7% 41.3%; background: #eff3f7 url('/images/suraksha-login-reference.png') center / 100% 100% no-repeat; }
+.auth-register-layout { position: relative; grid-template-columns: 58.7% 41.3%; background: #eff3f7; }
+.auth-register-layout > .auth-story, .auth-register-layout > .auth-panel { position: relative; z-index: 1; }
 .auth-register-layout .auth-story { min-height: 100vh; padding: 0; background: transparent; }
 .auth-register-layout .auth-story::before, .auth-register-layout .auth-story::after { display: none; }
 .register-hero-copy, .register-hero-location { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); clip-path: inset(50%); white-space: nowrap; }
