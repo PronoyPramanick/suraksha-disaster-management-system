@@ -1,6 +1,7 @@
 <x-guest-layout>
     <main class="auth-shell auth-register-layout">
         <section class="auth-story" aria-label="Suraksha community response">
+            <img class="auth-reference-background" src="{{ asset('images/suraksha-registration-hero.png') }}" alt="" aria-hidden="true">
             <div class="register-hero-copy">
                 <div class="register-hero-brand"><span class="register-shield" aria-hidden="true"><svg viewBox="0 0 64 72" fill="none"><path d="M32 3 59 14v19c0 17-10 28-27 36C15 61 5 50 5 33V14L32 3Z" stroke="currentColor" stroke-width="3"/><path d="M17 36c5-8 10-8 15 0s10 8 15 0M17 44c5-8 10-8 15 0s10 8 15 0M25 23l7-8 7 8v8H25v-8Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 52c6-5 12-5 18 0" stroke="#28c69b" stroke-width="4" stroke-linecap="round"/></svg></span><span><strong>SURAKSHA</strong><small>Disaster Management System<br>in Bangladesh</small></span></div>
                 <p>Together for a safer,<br>stronger Bangladesh.</p>
