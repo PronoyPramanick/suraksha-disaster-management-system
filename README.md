@@ -1,37 +1,67 @@
 # SURAKSHA – Adaptive Community Disaster Intelligence Platform
 
-## Overview
+## 📌 Project Description
 
-SURAKSHA is a Laravel-based disaster management platform designed to help communities in Bangladesh prepare for, respond to, and recover from emergencies.
+SURAKSHA is a web-based disaster management platform designed to support disaster preparedness, emergency response, rescue coordination, and relief management in Bangladesh.
+
+The platform helps citizens access disaster alerts, submit rescue requests, locate emergency shelters, find safety guidelines, and access important emergency information. Administrators can manage disaster information, rescue operations, volunteers, shelters, and relief resources.
+
+## 🛠️ Technologies Used
+
+- Programming Language: PHP, JavaScript, HTML5, CSS3
+- Backend Framework: Laravel
+- Frontend: Blade Templates, HTML, CSS, JavaScript
+- CSS Framework: Bootstrap
+- Database: MySQL / SQLite
+- ORM: Laravel Eloquent ORM
+- Development Tools: VS Code, Git, GitHub, Composer, Node.js, NPM
+- Local Server: XAMPP
+
+## ✨ Main Features
+
+- Disaster News and Alerts
+- Affected Area Information
+- Disaster Safety Guidelines
+- Emergency Helpline Directory
+- Rescue Request Submission and Tracking
+- Volunteer Registration and Approval
+- Volunteer Task Assignment
+- Missing Person Reports
+- Shelter Locator and Capacity Management
+- Shelter Facilities and Evacuation Information
+- Relief Resource Inventory
+- Donation Management
+- NGO and Medical Camp Directory
+- Disaster History Dashboard
+- Interactive Map of Bangladesh
+- Disaster Impact Assessment
+
+## 📋 Prerequisites
+
+Install the following software before running the project:
+
+1. PHP 8.2 or newer, with the `mbstring`, `openssl`, `pdo_sqlite`, `fileinfo`, and `zip` extensions enabled
+2. Composer
+3. Node.js LTS (includes npm)
+4. Git
+5. Visual Studio Code (recommended)
+
+XAMPP is only needed if you choose MySQL. The default configuration uses SQLite, so you do not need to start Apache or MySQL to run the Laravel development server.
+
+On Windows, install Node.js LTS from [nodejs.org](https://nodejs.org/en/download) or run `winget install --id OpenJS.NodeJS.LTS --exact`. Reopen your terminal after installation so the updated PATH is available.
 
 The application supports disaster alerts, emergency response workflows, shelter and resource management, volunteer coordination, and public information access for citizens and administrators.
 
-## Tech Stack
+### Step 1: Open the project
 
-- Backend: Laravel 12
-- Frontend: Blade templates, Vite, Bootstrap, Tailwind CSS
-- Database: SQLite by default, MySQL optional
-- Language: PHP, JavaScript, HTML, CSS
-- Dev tools: Composer, npm, Git, GitHub, VS Code
+If you do not already have the project, clone the correct repository:
 
-## Key Features
+```powershell
+git clone https://github.com/PronoyPramanick/suraksha-disaster-management-system.git
+Set-Location suraksha-disaster-management-system
+```
 
-- Disaster alerts and news updates
-- Affected area information
-- Safety guidelines and emergency instructions
-- Emergency helpline directory
-- Rescue request submission and tracking
-- Volunteer registration and assignment
-- Missing person reporting
-- Shelter locator and capacity tracking
-- Relief resource inventory
-- Donation and NGO coordination
-- Medical camp directory
-- Disaster history dashboard
-- Interactive map support for Bangladesh
-- Impact assessment and reporting
-
-## Prerequisites
+If you already cloned it, open a terminal in the project folder instead.
 
 Before running the project, install the following:
 
@@ -49,52 +79,33 @@ winget install --id OpenJS.NodeJS.LTS --exact
 
 Then reopen the terminal so the updated PATH is available.
 
-## Installation and Setup
+Create your local environment file and generate the application key:
 
 ### 1. Clone the repository
-
-```powershell
-git clone https://github.com/PronoyPramanick/suraksha-disaster-management-system.git
-Set-Location suraksha-disaster-management-system
-```
-
-### 2. Install PHP dependencies
-
-```powershell
-composer install
-```
-
-### 3. Configure the environment
-
-Create the local environment file and generate the app key:
 
 ```powershell
 Copy-Item .env.example .env
 php artisan key:generate
 ```
 
-Important: do not commit your `.env` file because it may contain sensitive local configuration.
+### 3. Configure the environment
 
-### 4. Set up the database
+Create the local environment file and generate the app key:
 
-SQLite is the default database in `.env.example` and is the recommended option for local development.
-
-Create the SQLite database file and run migrations:
+SQLite is the default in `.env.example` and is the simplest option for local development. Create its database file and run the migrations:
 
 ```powershell
 New-Item -ItemType File -Path database\database.sqlite -Force
 php artisan migrate
 ```
 
-You do not need to start a separate database server for SQLite.
+You do not need to install or start a separate database server for SQLite.
 
-#### Optional: Use MySQL
+#### Optional: Use MySQL instead
 
-If you prefer MySQL:
-
-1. Start MySQL from XAMPP or your local MySQL server.
-2. Create a database named `disaster_management`.
-3. Update the database configuration in `.env`:
+1. Start MySQL from the XAMPP Control Panel.
+2. Create a database named `disaster_management` in phpMyAdmin.
+3. Update the database settings in `.env`:
 
 ```env
 DB_CONNECTION=mysql
@@ -105,45 +116,33 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Then run:
+Use the username and password configured for your MySQL installation, then run `php artisan migrate`.
 
-```powershell
-php artisan migrate
-```
-
-### 5. Install frontend dependencies
+### Step 5: Install frontend dependencies
 
 ```powershell
 npm install
 ```
 
-### 6. Start the application
+### Step 6: Start the app
 
-Open two terminals in the project folder.
-
-In the first terminal, start the Vite frontend:
+Open two terminals in the project folder. Run the Vite development server in the first:
 
 ```powershell
 npm run dev
 ```
 
-In the second terminal, run the Laravel app:
+Run the Laravel server in the second:
 
 ```powershell
 php artisan serve
 ```
 
-Then open http://127.0.0.1:8000 in your browser.
-
-For a production build, run:
-
-```powershell
-npm run build
-```
+Open http://127.0.0.1:8000 in your browser. Keep both terminals running while developing.
 
 ## Useful Commands
 
-Check installed tooling versions:
+Check installed tool versions:
 
 ```bash
 php --version
@@ -183,11 +182,11 @@ Start the local development server:
 php artisan serve
 ```
 
-## Team Workflow
+## 👥 Working with Group Members
 
-Each team member should clone the repository and install dependencies locally. Keep `.env` and other machine-specific files local and never commit secrets.
+Each group member should clone the repository and install the dependencies locally. Keep `.env` and other machine-specific files local; never commit secrets.
 
-Start from the main branch, then create a feature branch:
+Start by updating `main`, then create a separate branch for your work:
 
 ```powershell
 git switch main
@@ -195,7 +194,7 @@ git pull --ff-only origin main
 git switch -c feature/your-name-task
 ```
 
-After finishing work:
+After making and reviewing your changes:
 
 ```powershell
 git status
@@ -204,7 +203,9 @@ git commit -m "Describe your changes"
 git push -u origin feature/your-name-task
 ```
 
-Open a pull request to merge the branch into `main`.   
+Open a pull request on GitHub to merge the branch into `main`. Do not push directly to `main`. If you are continuing work on an existing branch, switch to that branch first, then use `git pull --ff-only` and `git push` to sync it with its upstream.
+
+Collaborators need GitHub repository access to push branches.
 
 ## Project Goal
 
