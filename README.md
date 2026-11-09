@@ -208,4 +208,4 @@ Open a pull request to merge the branch into `main`.
 
 ## Project Goal
 
-The goal of SURAKSHA is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized digital platform for disaster response in Bangladesh.
+The goal of SURAKSHA is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized digital platform for disaster response in Bangladesh. 
