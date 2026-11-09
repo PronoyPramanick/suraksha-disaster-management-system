@@ -50,7 +50,7 @@ XAMPP is only needed if you choose MySQL. The default configuration uses SQLite,
 
 On Windows, install Node.js LTS from [nodejs.org](https://nodejs.org/en/download) or run `winget install --id OpenJS.NodeJS.LTS --exact`. Reopen your terminal after installation so the updated PATH is available.
 
-## 📥 Installation and Setup
+The application supports disaster alerts, emergency response workflows, shelter and resource management, volunteer coordination, and public information access for citizens and administrators.
 
 ### Step 1: Open the project
 
@@ -63,28 +63,34 @@ Set-Location suraksha-disaster-management-system
 
 If you already cloned it, open a terminal in the project folder instead.
 
-### Step 2: Install PHP Dependencies
+Before running the project, install the following:
 
-Run:
+1. PHP 8.2 or newer with the `mbstring`, `openssl`, `pdo_sqlite`, `fileinfo`, and `zip` extensions enabled
+2. Composer
+3. Node.js LTS (includes npm)
+4. Git
+5. Optional: XAMPP if you plan to use MySQL instead of SQLite
 
-```bash
-composer install
+On Windows, install Node.js LTS from [nodejs.org](https://nodejs.org/en/download) or run:
+
+```powershell
+winget install --id OpenJS.NodeJS.LTS --exact
 ```
 
-### Step 3: Configure the Environment
+Then reopen the terminal so the updated PATH is available.
 
 Create your local environment file and generate the application key:
 
-For Windows PowerShell:
+### 1. Clone the repository
 
 ```powershell
 Copy-Item .env.example .env
 php artisan key:generate
 ```
 
-**Important:** Never upload your `.env` file to GitHub because it may contain sensitive information.
+### 3. Configure the environment
 
-### Step 4: Configure the Database
+Create the local environment file and generate the app key:
 
 SQLite is the default in `.env.example` and is the simplest option for local development. Create its database file and run the migrations:
 
@@ -134,7 +140,7 @@ php artisan serve
 
 Open http://127.0.0.1:8000 in your browser. Keep both terminals running while developing.
 
-## 🔄 Useful Commands
+## Useful Commands
 
 Check installed tool versions:
 
@@ -146,19 +152,19 @@ npm --version
 git --version
 ```
 
-Check the Laravel application:
+Check the Laravel version:
 
 ```bash
 php artisan --version
 ```
 
-List application routes:
+List routes:
 
 ```bash
 php artisan route:list
 ```
 
-Clear the application cache:
+Clear cached files:
 
 ```bash
 php artisan optimize:clear
@@ -170,7 +176,7 @@ Run database migrations:
 php artisan migrate
 ```
 
-Start the local server:
+Start the local development server:
 
 ```bash
 php artisan serve
@@ -201,6 +207,6 @@ Open a pull request on GitHub to merge the branch into `main`. Do not push direc
 
 Collaborators need GitHub repository access to push branches.
 
-## 🎯 Project Goal
+## Project Goal
 
-The goal of SURAKSHA is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized platform for disaster management in Bangladesh.
+The goal of SURAKSHA is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized digital platform for disaster response in Bangladesh.    
