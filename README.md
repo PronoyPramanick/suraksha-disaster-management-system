@@ -40,30 +40,28 @@ The platform helps citizens access disaster alerts, submit rescue requests, loca
 
 Install the following software before running the project:
 
-1. PHP
+1. PHP 8.2 or newer, with the `mbstring`, `openssl`, `pdo_sqlite`, `fileinfo`, and `zip` extensions enabled
 2. Composer
-3. Node.js and NPM
-4. XAMPP (if using MySQL locally)
-5. Git
-6. Visual Studio Code (recommended)
+3. Node.js LTS (includes npm)
+4. Git
+5. Visual Studio Code (recommended)
 
-Make sure your PHP version is compatible with the project's Laravel version.
+XAMPP is only needed if you choose MySQL. The default configuration uses SQLite, so you do not need to start Apache or MySQL to run the Laravel development server.
+
+On Windows, install Node.js LTS from [nodejs.org](https://nodejs.org/en/download) or run `winget install --id OpenJS.NodeJS.LTS --exact`. Reopen your terminal after installation so the updated PATH is available.
 
 ## 📥 Installation and Setup
 
-### Step 1: Clone the Repository
+### Step 1: Open the project
 
-Open your terminal and run:
+If you do not already have the project, clone the correct repository:
 
-```bash
-git clone https://github.com/PronoyPramanick/disaster-management-system.git
+```powershell
+git clone https://github.com/PronoyPramanick/suraksha-disaster-management-system.git
+Set-Location suraksha-disaster-management-system
 ```
 
-Navigate to the project directory:
-
-```bash
-cd disaster-management-system
-```
+If you already cloned it, open a terminal in the project folder instead.
 
 ### Step 2: Install PHP Dependencies
 
@@ -75,17 +73,12 @@ composer install
 
 ### Step 3: Configure the Environment
 
-Create your local environment file.
+Create your local environment file and generate the application key:
 
 For Windows PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
-```
-
-Generate the application key:
-
-```bash
 php artisan key:generate
 ```
 
@@ -93,20 +86,20 @@ php artisan key:generate
 
 ### Step 4: Configure the Database
 
-You can use MySQL or SQLite.
+SQLite is the default in `.env.example` and is the simplest option for local development. Create its database file and run the migrations:
 
-#### Option A: ( Only if we use MySQL)
-
-1. Open XAMPP Control Panel.
-2. Start Apache and MySQL.
-3. Open phpMyAdmin.
-4. Create a database named:
-
-```text
-disaster_management
+```powershell
+New-Item -ItemType File -Path database\database.sqlite -Force
+php artisan migrate
 ```
 
-5. Update the database settings in your `.env` file:
+You do not need to install or start a separate database server for SQLite.
+
+#### Optional: Use MySQL instead
+
+1. Start MySQL from the XAMPP Control Panel.
+2. Create a database named `disaster_management` in phpMyAdmin.
+3. Update the database settings in `.env`:
 
 ```env
 DB_CONNECTION=mysql
@@ -117,66 +110,40 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Adjust the username and password if your MySQL configuration is different.
+Use the username and password configured for your MySQL installation, then run `php artisan migrate`.
 
-#### Option B: SQLite
+### Step 5: Install frontend dependencies
 
-If the project is configured to use SQLite, follow the project's existing SQLite configuration instead. You do not need to create a MySQL database when using SQLite.
-
-### Step 5: Run Database Migrations
-
-Run:
-
-```bash
-php artisan migrate
-```
-
-This creates the database tables defined by the project's migrations.
-
-### Step 6: Install Frontend Dependencies
-
-Run:
-
-```bash
+```powershell
 npm install
 ```
 
-For development, run:
+### Step 6: Start the app
 
-```bash
+Open two terminals in the project folder. Run the Vite development server in the first:
+
+```powershell
 npm run dev
 ```
 
-Keep this terminal running while developing.
+Run the Laravel server in the second:
 
-### Step 7: Start the Laravel Server
-
-Open another terminal in the project directory and run:
-
-```bash
+```powershell
 php artisan serve
 ```
 
-### Step 8: Open the Website
-
-Open your browser and visit:
-
-http://127.0.0.1:8000
-
-The Laravel application should now be accessible locally.
+Open http://127.0.0.1:8000 in your browser. Keep both terminals running while developing.
 
 ## 🔄 Useful Commands
 
-Check the PHP version:
+Check installed tool versions:
 
 ```bash
 php --version
-```
-
-Check the Composer version:
-
-```bash
 composer --version
+node --version
+npm --version
+git --version
 ```
 
 Check the Laravel application:
@@ -211,27 +178,28 @@ php artisan serve
 
 ## 👥 Working with Group Members
 
-Each group member should clone the repository and install the required dependencies locally.
+Each group member should clone the repository and install the dependencies locally. Keep `.env` and other machine-specific files local; never commit secrets.
 
-Every member must configure their own `.env` file and database.
+Start by updating `main`, then create a separate branch for your work:
 
-Do not share `.env` files containing passwords or secret keys through GitHub.
-
-Before pushing changes, run:
-
-```bash
-git pull origin main
+```powershell
+git switch main
+git pull --ff-only origin main
+git switch -c feature/your-name-task
 ```
 
-After making changes, use:
+After making and reviewing your changes:
 
-```bash
-git add .
+```powershell
+git status
+git add <files-you-changed>
 git commit -m "Describe your changes"
-git push origin main
+git push -u origin feature/your-name-task
 ```
 
-Collaborators must have the appropriate GitHub repository permissions to push changes.
+Open a pull request on GitHub to merge the branch into `main`. Do not push directly to `main`. If you are continuing work on an existing branch, switch to that branch first, then use `git pull --ff-only` and `git push` to sync it with its upstream.
+
+Collaborators need GitHub repository access to push branches.
 
 ## 🎯 Project Goal
 
