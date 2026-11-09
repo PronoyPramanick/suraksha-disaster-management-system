@@ -1,105 +1,100 @@
 # SURAKSHA – Adaptive Community Disaster Intelligence Platform
 
-## 📌 Project Description
+## Overview
 
-SURAKSHA is a web-based disaster management platform designed to support disaster preparedness, emergency response, rescue coordination, and relief management in Bangladesh.
+SURAKSHA is a Laravel-based disaster management platform designed to help communities in Bangladesh prepare for, respond to, and recover from emergencies.
 
-The platform helps citizens access disaster alerts, submit rescue requests, locate emergency shelters, find safety guidelines, and access important emergency information. Administrators can manage disaster information, rescue operations, volunteers, shelters, and relief resources.
+The application supports disaster alerts, emergency response workflows, shelter and resource management, volunteer coordination, and public information access for citizens and administrators.
 
-## 🛠️ Technologies Used
+## Tech Stack
 
-- Programming Language: PHP, JavaScript, HTML5, CSS3
-- Backend Framework: Laravel
-- Frontend: Blade Templates, HTML, CSS, JavaScript
-- CSS Framework: Bootstrap
-- Database: MySQL / SQLite
-- ORM: Laravel Eloquent ORM
-- Development Tools: VS Code, Git, GitHub, Composer, Node.js, NPM
-- Local Server: XAMPP
+- Backend: Laravel 12
+- Frontend: Blade templates, Vite, Bootstrap, Tailwind CSS
+- Database: SQLite by default, MySQL optional
+- Language: PHP, JavaScript, HTML, CSS
+- Dev tools: Composer, npm, Git, GitHub, VS Code
 
-## ✨ Main Features
+## Key Features
 
-- Disaster News and Alerts
-- Affected Area Information
-- Disaster Safety Guidelines
-- Emergency Helpline Directory
-- Rescue Request Submission and Tracking
-- Volunteer Registration and Approval
-- Volunteer Task Assignment
-- Missing Person Reports
-- Shelter Locator and Capacity Management
-- Shelter Facilities and Evacuation Information
-- Relief Resource Inventory
-- Donation Management
-- NGO and Medical Camp Directory
-- Disaster History Dashboard
-- Interactive Map of Bangladesh
-- Disaster Impact Assessment
+- Disaster alerts and news updates
+- Affected area information
+- Safety guidelines and emergency instructions
+- Emergency helpline directory
+- Rescue request submission and tracking
+- Volunteer registration and assignment
+- Missing person reporting
+- Shelter locator and capacity tracking
+- Relief resource inventory
+- Donation and NGO coordination
+- Medical camp directory
+- Disaster history dashboard
+- Interactive map support for Bangladesh
+- Impact assessment and reporting
 
-## 📋 Prerequisites
+## Prerequisites
 
-Install the following software before running the project:
+Before running the project, install the following:
 
-1. PHP 8.2 or newer, with the `mbstring`, `openssl`, `pdo_sqlite`, `fileinfo`, and `zip` extensions enabled
+1. PHP 8.2 or newer with the `mbstring`, `openssl`, `pdo_sqlite`, `fileinfo`, and `zip` extensions enabled
 2. Composer
 3. Node.js LTS (includes npm)
 4. Git
-5. Visual Studio Code (recommended)
+5. Optional: XAMPP if you plan to use MySQL instead of SQLite
 
-XAMPP is only needed if you choose MySQL. The default configuration uses SQLite, so you do not need to start Apache or MySQL to run the Laravel development server.
+On Windows, install Node.js LTS from [nodejs.org](https://nodejs.org/en/download) or run:
 
-On Windows, install Node.js LTS from [nodejs.org](https://nodejs.org/en/download) or run `winget install --id OpenJS.NodeJS.LTS --exact`. Reopen your terminal after installation so the updated PATH is available.
+```powershell
+winget install --id OpenJS.NodeJS.LTS --exact
+```
 
-## 📥 Installation and Setup
+Then reopen the terminal so the updated PATH is available.
 
-### Step 1: Open the project
+## Installation and Setup
 
-If you do not already have the project, clone the correct repository:
+### 1. Clone the repository
 
 ```powershell
 git clone https://github.com/PronoyPramanick/suraksha-disaster-management-system.git
 Set-Location suraksha-disaster-management-system
 ```
 
-If you already cloned it, open a terminal in the project folder instead.
+### 2. Install PHP dependencies
 
-### Step 2: Install PHP Dependencies
-
-Run:
-
-```bash
+```powershell
 composer install
 ```
 
-### Step 3: Configure the Environment
+### 3. Configure the environment
 
-Create your local environment file and generate the application key:
-
-For Windows PowerShell:
+Create the local environment file and generate the app key:
 
 ```powershell
 Copy-Item .env.example .env
 php artisan key:generate
 ```
 
-**Important:** Never upload your `.env` file to GitHub because it may contain sensitive information.
+Important: do not commit your `.env` file because it may contain sensitive local configuration.
 
-### Step 4: Configure the Database
+### 4. Set up the database
 
-SQLite is the default in `.env.example` and is the simplest option for local development. Create its database file and run the migrations:
+SQLite is the default database in `.env.example` and is the recommended option for local development.
+
+Create the SQLite database file and run migrations:
 
 ```powershell
 New-Item -ItemType File -Path database\database.sqlite -Force
 php artisan migrate
 ```
 
-You do not need to install or start a separate database server for SQLite.
+You do not need to start a separate database server for SQLite.
 
-#### Optional: Use MySQL instead
+#### Optional: Use MySQL
 
-1. Start MySQL from the XAMPP Control Panel.
-2. Create a database named `disaster_management` in phpMyAdmin.
-3. Update the database settings in `.env`:
+If you prefer MySQL:
+
+1. Start MySQL from XAMPP or your local MySQL server.
+2. Create a database named `disaster_management`.
+3. Update the database configuration in `.env`:
 
 ```env
 DB_CONNECTION=mysql
@@ -110,33 +105,45 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Use the username and password configured for your MySQL installation, then run `php artisan migrate`.
+Then run:
 
-### Step 5: Install frontend dependencies
+```powershell
+php artisan migrate
+```
+
+### 5. Install frontend dependencies
 
 ```powershell
 npm install
 ```
 
-### Step 6: Start the app
+### 6. Start the application
 
-Open two terminals in the project folder. Run the Vite development server in the first:
+Open two terminals in the project folder.
+
+In the first terminal, start the Vite frontend:
 
 ```powershell
 npm run dev
 ```
 
-Run the Laravel server in the second:
+In the second terminal, run the Laravel app:
 
 ```powershell
 php artisan serve
 ```
 
-Open http://127.0.0.1:8000 in your browser. Keep both terminals running while developing.
+Then open http://127.0.0.1:8000 in your browser.
 
-## 🔄 Useful Commands
+For a production build, run:
 
-Check installed tool versions:
+```powershell
+npm run build
+```
+
+## Useful Commands
+
+Check installed tooling versions:
 
 ```bash
 php --version
@@ -146,19 +153,19 @@ npm --version
 git --version
 ```
 
-Check the Laravel application:
+Check the Laravel version:
 
 ```bash
 php artisan --version
 ```
 
-List application routes:
+List routes:
 
 ```bash
 php artisan route:list
 ```
 
-Clear the application cache:
+Clear cached files:
 
 ```bash
 php artisan optimize:clear
@@ -170,17 +177,17 @@ Run database migrations:
 php artisan migrate
 ```
 
-Start the local server:
+Start the local development server:
 
 ```bash
 php artisan serve
 ```
 
-## 👥 Working with Group Members
+## Team Workflow
 
-Each group member should clone the repository and install the dependencies locally. Keep `.env` and other machine-specific files local; never commit secrets.
+Each team member should clone the repository and install dependencies locally. Keep `.env` and other machine-specific files local and never commit secrets.
 
-Start by updating `main`, then create a separate branch for your work:
+Start from the main branch, then create a feature branch:
 
 ```powershell
 git switch main
@@ -188,7 +195,7 @@ git pull --ff-only origin main
 git switch -c feature/your-name-task
 ```
 
-After making and reviewing your changes:
+After finishing work:
 
 ```powershell
 git status
@@ -197,10 +204,8 @@ git commit -m "Describe your changes"
 git push -u origin feature/your-name-task
 ```
 
-Open a pull request on GitHub to merge the branch into `main`. Do not push directly to `main`. If you are continuing work on an existing branch, switch to that branch first, then use `git pull --ff-only` and `git push` to sync it with its upstream.
+Open a pull request to merge the branch into `main`.
 
-Collaborators need GitHub repository access to push branches.
+## Project Goal
 
-## 🎯 Project Goal
-
-The goal of SURAKSHA is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized platform for disaster management in Bangladesh.
+The goal of SURAKSHA is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized digital platform for disaster response in Bangladesh.hhh
