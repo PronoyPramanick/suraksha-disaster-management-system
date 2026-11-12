@@ -142,6 +142,19 @@ Open http://127.0.0.1:8000 in your browser. Keep both terminals running while de
 
 ## Useful Commands
 
+### Incident map and JSON API
+
+The public incident map is available at `/map` and uses Leaflet with OpenStreetMap tiles. To place an alert on the map, enter both latitude and longitude when creating or editing it. Only active alerts with coordinates are shown as markers.
+
+The versioned JSON API is public and read-only:
+
+```text
+GET /api/v1/alerts
+GET /api/v1/alerts/{id}
+```
+
+The list endpoint supports `category`, `severity`, `status`, `q`, `has_coordinates`, `per_page` (up to 100), and pagination via `page`. Example: `/api/v1/alerts?status=active&has_coordinates=1&per_page=100`.
+
 Check installed tool versions:
 
 ```bash
@@ -173,8 +186,17 @@ php artisan optimize:clear
 Run database migrations:
 
 ```bash
-php artisan migrate
+php artisan migrate --seed
 ```
+
+The seeder creates the local administrator account:
+
+```text
+Email: admin@gmail.com
+Password: 12345
+```
+
+Each collaborator should run `php artisan migrate --seed` after configuring their own `.env`. The seeded account is for local development; change its password for any deployed environment.
 
 Start the local development server:
 

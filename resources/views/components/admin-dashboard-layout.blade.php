@@ -22,6 +22,7 @@
             <nav class="admin-side-nav" aria-label="Admin navigation">
                 <a href="{{ route('dashboard') }}" class="admin-nav-link {{ request()->routeIs('dashboard') ? 'is-active' : '' }}"><span>⌂</span>Dashboard</a>
                 <a href="{{ route('alerts.index') }}" class="admin-nav-link {{ request()->routeIs('alerts.*') ? 'is-active' : '' }}"><span>◖</span>Disaster Alerts</a>
+                <a href="{{ route('map.index') }}" class="admin-nav-link {{ request()->routeIs('map.*') ? 'is-active' : '' }}"><span>⌖</span>Incident Map</a>
                 <a href="{{ route('alerts.index') }}#recent-alerts" class="admin-nav-link"><span>⌖</span>Affected Areas</a>
                 <a href="{{ route('alerts.index') }}#safety-guidelines" class="admin-nav-link"><span>⬡</span>Safety Guidelines</a>
             </nav>

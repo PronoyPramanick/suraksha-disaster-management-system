@@ -9,6 +9,18 @@ use Illuminate\View\View;
 
 class DisasterAlertController extends Controller
 {
+    public function affectedAreas(Request $request): View
+    {
+        $query = DisasterAlert::query()->where('kind', 'alert')->where('status', 'active')->latest('published_at');
+        $search = trim((string) $request->query('q', ''));
+        $category = $request->query('category');
+        $severity = $request->query('severity');
+        if ($search !== '') $query->where(fn ($q) => $q->where('location', 'like', "%{$search}%")->orWhere('affected_area', 'like', "%{$search}%")->orWhere('summary', 'like', "%{$search}%"));
+        if (in_array($category, ['cyclone','flood','storm','river_level','fire','earthquake','landslide','general'], true)) $query->where('category', $category);
+        if (in_array($severity, ['critical','high','moderate'], true)) $query->where('severity', $severity);
+        return view('affected-areas.index', ['areas' => $query->paginate(10)->withQueryString(), 'search' => $search, 'category' => $category, 'severity' => $severity]);
+    }
+
     public function index(): View
     {
         $totalAlerts = DisasterAlert::count();
@@ -93,6 +105,8 @@ class DisasterAlertController extends Controller
             'category' => ['required', 'in:cyclone,flood,storm,shelter,health,rescue,fire,earthquake,landslide,river_level,general'],
             'severity' => ['required', 'in:critical,high,moderate'],
             'location' => ['required', 'string', 'max:160'],
+            'latitude' => ['nullable', 'required_with:longitude', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'required_with:latitude', 'numeric', 'between:-180,180'],
             'affected_area' => ['required', 'string', 'max:180'],
             'summary' => ['required', 'string', 'max:280'],
             'body' => ['required', 'string', 'max:20000'],
