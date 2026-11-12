@@ -8,6 +8,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('/map', 'map.index')->name('map.index');
+Route::get('/affected-areas', [DisasterAlertController::class, 'affectedAreas'])->name('affected-areas.index');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
