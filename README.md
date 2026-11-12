@@ -232,3 +232,13 @@ Collaborators need GitHub repository access to push branches.
 ## Project Goal
 
 The goal of SURAKSHA is to improve disaster preparedness, emergency communication, rescue coordination, and resource management through a centralized digital platform for disaster response in Bangladesh.    
+
+## Future Improvements
+
+There are a few things we can improve in SURAKSHA in the future.
+
+- Make the website easier to use on mobile phones.
+- Help users find emergency information more quickly.
+- Add more useful disaster safety tips.
+- Make the website easier to navigate.
+- Improve the overall user experience.
