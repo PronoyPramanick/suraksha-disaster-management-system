@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DisasterAlertController;
 use App\Http\Controllers\RescueRequestController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MissingPersonReportController;
+use App\Http\Controllers\VolunteerApplicationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,6 +19,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/missing-persons', [MissingPersonReportController::class,'index'])->name('missing-persons.index');
+    Route::get('/missing-persons/create', [MissingPersonReportController::class,'create'])->name('missing-persons.create');
+    Route::post('/missing-persons', [MissingPersonReportController::class,'store'])->name('missing-persons.store');
+    Route::patch('/missing-persons/{missingPerson}/status', [MissingPersonReportController::class,'update'])->name('missing-persons.update');
+    Route::get('/volunteers', [VolunteerApplicationController::class,'index'])->name('volunteers.index');
+    Route::get('/volunteers/apply', [VolunteerApplicationController::class,'create'])->name('volunteers.create');
+    Route::post('/volunteers', [VolunteerApplicationController::class,'store'])->name('volunteers.store');
+    Route::patch('/volunteers/{application}/review', [VolunteerApplicationController::class,'review'])->middleware('admin')->name('volunteers.review');
     Route::get('/rescue-requests', [RescueRequestController::class, 'index'])->name('rescue-requests.index');
     Route::get('/rescue-requests/create', [RescueRequestController::class, 'create'])->name('rescue-requests.create');
     Route::post('/rescue-requests', [RescueRequestController::class, 'store'])->name('rescue-requests.store');
