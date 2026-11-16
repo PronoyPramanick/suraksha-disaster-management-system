@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'role' => 'admin',
-                'password' => '12345678',
+                'password' => '12345',
             ]
         );
 

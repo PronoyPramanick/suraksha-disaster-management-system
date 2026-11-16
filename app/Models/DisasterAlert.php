@@ -12,6 +12,8 @@ class DisasterAlert extends Model
         'category',
         'severity',
         'location',
+        'latitude',
+        'longitude',
         'affected_area',
         'summary',
         'body',
@@ -24,6 +26,8 @@ class DisasterAlert extends Model
     {
         return [
             'published_at' => 'datetime',
+            'latitude' => 'float',
+            'longitude' => 'float',
         ];
     }
 }

@@ -7,7 +7,7 @@
                 <p>Together for a safer,<br>stronger Bangladesh.</p>
             </div>
             <div class="register-hero-location">Bangladesh — Stronger Together</div>
-            <div class="sr-only">Join SURAKSHA and be part of a safer Bangladesh. Choose Citizen or Volunteer registration.</div>
+            <div class="visually-hidden">Join SURAKSHA and be part of a safer Bangladesh. Choose Citizen or Volunteer registration.</div>
         </section>
 
         <section class="auth-panel" aria-labelledby="register-title">
