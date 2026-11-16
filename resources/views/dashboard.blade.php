@@ -7,6 +7,7 @@
                 <div class="p-6 text-gray-900">
                     <p>{{ __('Welcome to the Suraksha community response platform.') }}</p>
                     <a class="alert-primary-link mt-5" href="{{ route('alerts.index') }}">{{ auth()->user()->role === 'admin' ? __('Disaster News & Alerts') : __('View Disaster News & Alerts') }}</a>
+                    <a class="alert-primary-link mt-5" href="{{ route('rescue-requests.index') }}">{{ auth()->user()->role === 'admin' ? __('Manage Rescue Requests') : __('My Rescue Requests') }}</a>
                 </div>
             </div>
         </div>

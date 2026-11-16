@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('alerts.index')" :active="request()->routeIs('alerts.*')">
                         {{ auth()->user()->role === 'admin' ? __('Disaster News & Alerts') : __('View Disaster News & Alerts') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('rescue-requests.index')" :active="request()->routeIs('rescue-requests.*')">
+                        {{ auth()->user()->role === 'admin' ? __('Rescue Requests') : __('My Rescue Requests') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -75,6 +78,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('alerts.index')" :active="request()->routeIs('alerts.*')">
                 {{ auth()->user()->role === 'admin' ? __('Disaster News & Alerts') : __('View Disaster News & Alerts') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('rescue-requests.index')" :active="request()->routeIs('rescue-requests.*')">
+                {{ auth()->user()->role === 'admin' ? __('Rescue Requests') : __('My Rescue Requests') }}
             </x-responsive-nav-link>
         </div>
 

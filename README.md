@@ -36,6 +36,10 @@ The platform helps citizens access disaster alerts, submit rescue requests, loca
 - Interactive Map of Bangladesh
 - Disaster Impact Assessment
 
+### Rescue requests
+
+Signed-in citizens can submit a request with a contact name and phone number, location, emergency description, number of people needing help, and urgency. Submitted requests receive a reference number and start as **Pending**. Citizens can track their own requests from **My Rescue Requests**; only administrators can see all requests and change a request to **In Progress** or **Rescued**.
+
 ## 📋 Prerequisites
 
 Install the following software before running the project:
