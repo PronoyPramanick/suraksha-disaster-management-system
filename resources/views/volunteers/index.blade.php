@@ -1,67 +1,87 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl">Volunteer Applications</h2>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <span class="map-eyebrow">COMMUNITY RESPONSE</span>
+                <h1 class="h3 mb-0 mt-2">{{ $admin ? 'Volunteer Applications' : 'My Volunteer Application' }}</h1>
+            </div>
+            @if(!$admin && $applications->isEmpty())
+                <a class="btn btn-success" href="{{ route('volunteers.create') }}">Apply to volunteer</a>
+            @endif
+        </div>
     </x-slot>
 
-    <div class="max-w-5xl mx-auto py-8 px-4">
-
-        @if(!$admin && $applications->isEmpty())
-            <a class="bg-blue-700 text-white px-4 py-2 rounded"
-               href="{{ route('volunteers.create') }}">
-                Apply to volunteer
-            </a>
-        @endif
-
+    <div class="container-xl py-4">
         @if(session('status'))
-            <p class="my-4 text-green-700">
-                {{ session('status') }}
-            </p>
+            <div class="alert alert-success" role="status">{{ session('status') }}</div>
         @endif
 
-        <div class="grid gap-4 mt-6">
-
+        <div class="d-grid gap-3">
             @forelse($applications as $application)
-                <div class="p-5 bg-white rounded shadow">
+                @php
+                    $statusClass = match ($application->status) {
+                        'Approved' => 'text-bg-success',
+                        'Rejected' => 'text-bg-danger',
+                        default => 'text-bg-warning',
+                    };
+                @endphp
 
-                    <h3 class="font-bold">
-                        {{ $admin ? $application->user->name : 'Your application' }}:
-                        {{ $application->status }}
-                    </h3>
+                <article class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+                            <div>
+                                <h2 class="h5 mb-1">{{ $admin ? ($application->name ?: $application->user->name) : 'Your application' }}</h2>
+                                @if($admin)
+                                    <a class="small text-secondary" href="mailto:{{ $application->email ?: $application->user->email }}">{{ $application->email ?: $application->user->email }}</a>
+                                @else
+                                    <span class="small text-secondary">Submitted {{ $application->created_at->format('M j, Y') }}</span>
+                                @endif
+                            </div>
+                            <span class="badge rounded-pill {{ $statusClass }}">{{ $application->status }}</span>
+                        </div>
 
-                    <p>Phone: {{ $application->phone }}</p>
-                    <p>Skills: {{ $application->skills }}</p>
-                    <p>Availability: {{ $application->availability }}</p>
-                    <p>Experience: {{ $application->experience }}</p>
+                        @if($application->status === 'Approved' && $application->user->volunteer_id)
+                            <div class="volunteer-id-notice mb-4">
+                                <span class="small fw-semibold text-uppercase">Assigned Volunteer ID</span>
+                                <strong>{{ $application->user->volunteer_id }}</strong>
+                                @unless($admin)<span>Use this ID and your password on the sign-in page.</span>@endunless
+                            </div>
+                        @endif
 
-                    @if($admin && $application->status === 'Pending')
-                        <form class="mt-3 flex gap-2"
-                              method="POST"
-                              action="{{ route('volunteers.review', $application) }}">
-                            @csrf
-                            @method('PATCH')
+                        <dl class="row mb-0 volunteer-application-details">
+                            <dt class="col-sm-3">Mobile number</dt><dd class="col-sm-9">{{ $application->phone }}</dd>
+                            <dt class="col-sm-3">Address</dt><dd class="col-sm-9">{{ $application->address ?: 'Not provided' }}</dd>
+                            <dt class="col-sm-3">Blood group</dt><dd class="col-sm-9">{{ $application->blood_group ?: 'Not provided' }}</dd>
+                            <dt class="col-sm-3">Skills</dt><dd class="col-sm-9 text-break">{{ $application->skills }}</dd>
+                            <dt class="col-sm-3">Availability</dt><dd class="col-sm-9">{{ $application->availability }}</dd>
+                            <dt class="col-sm-3">Relevant experience</dt><dd class="col-sm-9 text-break">{{ $application->experience ?: 'Not provided' }}</dd>
+                        </dl>
 
-                            <button name="status" value="Approved"
-                                    class="bg-green-700 text-white rounded px-4 py-2">
-                                Approve
-                            </button>
-
-                            <button name="status" value="Rejected"
-                                    class="bg-red-700 text-white rounded px-4 py-2">
-                                Reject
-                            </button>
-                        </form>
-                    @endif
-
-                </div>
+                        @if($admin && $application->status === 'Pending')
+                            <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
+                                <form method="POST" action="{{ route('volunteers.review', $application) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button class="btn btn-success" name="status" value="Approved" type="submit">Approve and grant volunteer access</button>
+                                </form>
+                                <form method="POST" action="{{ route('volunteers.review', $application) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button class="btn btn-outline-danger" name="status" value="Rejected" type="submit">Reject</button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                </article>
             @empty
-                <p>No applications yet.</p>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 text-secondary">
+                        {{ $admin ? 'There are no volunteer applications yet.' : 'You have not submitted a volunteer application yet.' }}
+                    </div>
+                </div>
             @endforelse
-
         </div>
 
-        <div class="mt-5">
-            {{ $applications->links() }}
-        </div>
-
+        <div class="mt-4">{{ $applications->links() }}</div>
     </div>
 </x-app-layout>

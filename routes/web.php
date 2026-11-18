@@ -8,7 +8,7 @@ use App\Http\Controllers\MissingPersonReportController;
 use App\Http\Controllers\VolunteerApplicationController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::view('/map', 'map.index')->name('map.index');

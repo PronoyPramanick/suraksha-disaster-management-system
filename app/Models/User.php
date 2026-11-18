@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(RescueRequest::class);
     }
+
+    public function volunteerApplication(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(VolunteerApplication::class);
+    }
 }
