@@ -34,8 +34,6 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'phone' => ['required', 'string', 'max:30'],
-            'role' => ['required', 'string', 'in:citizen,volunteer'],
-            'volunteer_id' => ['exclude_unless:role,volunteer', 'required', 'string', 'max:100', 'unique:users,volunteer_id'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -43,8 +41,7 @@ class RegisteredUserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-            'role' =>  $validated['role'],
-            'volunteer_id' => $validated['volunteer_id']?? null,
+            'role' => 'citizen',
             'password' => Hash::make($validated['password']),
         ]);
 

@@ -14,9 +14,12 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.login');
+        $requestedType = $request->query('type', 'citizen');
+        $loginType = in_array($requestedType, ['citizen', 'volunteer', 'admin'], true) ? $requestedType : 'citizen';
+
+        return view('auth.login', compact('loginType'));
     }
 
     /**

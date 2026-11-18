@@ -100,7 +100,8 @@ SQLite is the default in `.env.example` and is the simplest option for local dev
 
 ```powershell
 New-Item -ItemType File -Path database\database.sqlite -Force
-php artisan migrate
+php artisan migrate --seed
+php artisan storage:link
 ```
 
 You do not need to install or start a separate database server for SQLite.
@@ -120,7 +121,7 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Use the username and password configured for your MySQL installation, then run `php artisan migrate`.
+Use the username and password configured for your MySQL installation, then run `php artisan migrate --seed` and `php artisan storage:link`.
 
 ### Step 5: Install frontend dependencies
 
