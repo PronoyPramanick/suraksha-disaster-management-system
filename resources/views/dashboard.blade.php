@@ -8,6 +8,8 @@
                     <p>{{ __('Welcome to the Suraksha community response platform.') }}</p>
                     <a class="alert-primary-link mt-5" href="{{ route('alerts.index') }}">{{ auth()->user()->role === 'admin' ? __('Disaster News & Alerts') : __('View Disaster News & Alerts') }}</a>
                     <a class="alert-primary-link mt-5" href="{{ route('rescue-requests.index') }}">{{ auth()->user()->role === 'admin' ? __('Manage Rescue Requests') : __('My Rescue Requests') }}</a>
+                    <a class="alert-primary-link mt-5" href="{{ route('missing-persons.index') }}">Missing Person Reports</a>
+                    <a class="alert-primary-link mt-5" href="{{ route('volunteers.index') }}">Volunteer Applications</a>
                 </div>
             </div>
         </div>

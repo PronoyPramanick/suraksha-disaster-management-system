@@ -18,6 +18,8 @@
                     <x-nav-link :href="route('alerts.index')" :active="request()->routeIs('alerts.*')">
                         {{ auth()->user()->role === 'admin' ? __('Disaster News & Alerts') : __('View Disaster News & Alerts') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('missing-persons.index')" :active="request()->routeIs('missing-persons.*')">Missing Persons</x-nav-link>
+                    <x-nav-link :href="route('volunteers.index')" :active="request()->routeIs('volunteers.*')">Volunteers</x-nav-link>
                     <x-nav-link :href="route('rescue-requests.index')" :active="request()->routeIs('rescue-requests.*')">
                         {{ auth()->user()->role === 'admin' ? __('Rescue Requests') : __('My Rescue Requests') }}
                     </x-nav-link>
