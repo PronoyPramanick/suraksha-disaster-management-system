@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DisasterAlertController;
 use App\Http\Controllers\RescueRequestController;
+use App\Http\Controllers\AdminPanelController;
 use App\Models\DisasterAlert;
 use App\Models\RescueRequest;
 use Illuminate\Http\Request;
@@ -20,7 +21,8 @@ Route::get('/affected-areas', [DisasterAlertController::class, 'affectedAreas'])
 Route::get('/dashboard', function (Request $request) {
     $user = $request->user();
     $requestQuery = RescueRequest::query()
-        ->when($user->role !== 'admin', fn ($query) => $query->where('user_id', $user->id));
+        ->when($user->role === 'citizen', fn ($query) => $query->where('user_id', $user->id))
+        ->when($user->role === 'volunteer', fn ($query) => $query->whereHas('user', fn ($memberQuery) => $memberQuery->where('role', 'citizen')));
 
     $activeAlerts = DisasterAlert::query()->where('kind', 'alert')->where('status', 'active')->count();
     $rescueRequestCount = (clone $requestQuery)->count();
@@ -40,15 +42,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/volunteers/apply', [VolunteerApplicationController::class,'create'])->name('volunteers.create');
     Route::post('/volunteers', [VolunteerApplicationController::class,'store'])->name('volunteers.store');
     Route::patch('/volunteers/{application}/review', [VolunteerApplicationController::class,'review'])->middleware('admin')->name('volunteers.review');
+    Route::get('/admin', [AdminPanelController::class, 'index'])->middleware('admin')->name('admin.panel');
     Route::get('/rescue-requests', [RescueRequestController::class, 'index'])->name('rescue-requests.index');
     Route::get('/rescue-requests/create', [RescueRequestController::class, 'create'])->name('rescue-requests.create');
     Route::post('/rescue-requests', [RescueRequestController::class, 'store'])->name('rescue-requests.store');
-    Route::patch('/rescue-requests/{rescueRequest}/status', [RescueRequestController::class, 'updateStatus'])->middleware('admin')->name('rescue-requests.status');
+    Route::patch('/rescue-requests/{rescueRequest}/status', [RescueRequestController::class, 'updateStatus'])->name('rescue-requests.status');
     Route::get('/alerts', [DisasterAlertController::class, 'index'])->name('alerts.index');
 
-    Route::middleware('admin')->group(function () {
-        Route::resource('alerts', DisasterAlertController::class)->except(['index', 'show']);
-    });
+    Route::resource('alerts', DisasterAlertController::class)->except(['index', 'show']);
 
     Route::get('/alerts/{alert}', [DisasterAlertController::class, 'show'])->name('alerts.show');
 

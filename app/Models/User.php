@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(VolunteerApplication::class);
     }
+
+    public function rescueRequestActivities(): HasMany
+    {
+        return $this->hasMany(RescueRequestActivity::class);
+    }
 }

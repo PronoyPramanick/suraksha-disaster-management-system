@@ -3,9 +3,9 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div>
                 <span class="map-eyebrow">EMERGENCY RESPONSE</span>
-                <h1 class="h3 mb-0 mt-2">{{ auth()->user()->role === 'admin' ? 'Rescue Requests' : 'My Rescue Requests' }}</h1>
+                <h1 class="h3 mb-0 mt-2">{{ auth()->user()->role === 'admin' ? 'Rescue Requests' : (auth()->user()->role === 'volunteer' ? 'Citizen Rescue Requests' : 'My Rescue Requests') }}</h1>
             </div>
-            @if (auth()->user()->role !== 'admin')
+            @if (auth()->user()->role === 'citizen')
                 <a href="{{ route('rescue-requests.create') }}" class="btn btn-danger">Request assistance</a>
             @endif
         </div>
@@ -20,14 +20,16 @@
         @endif
         @if (auth()->user()->role === 'admin')
             <p class="text-secondary mb-4">Review incoming requests and update their response status. Contact details are visible to authorized administrators.</p>
+        @elseif (auth()->user()->role === 'volunteer')
+            <p class="text-secondary mb-4">Review citizen rescue requests and update their response status. Your name and each status change are recorded for administrators and shown to the citizen.</p>
         @endif
 
         <div class="card border-0 shadow-sm">
             @if ($requests->isEmpty())
                 <div class="card-body p-5 text-center">
                     <h2 class="h5">No rescue requests yet</h2>
-                    <p class="text-secondary mb-4">Requests you submit will appear here with their latest status.</p>
-                    @if (auth()->user()->role !== 'admin')
+                    <p class="text-secondary mb-4">{{ auth()->user()->role === 'volunteer' ? 'There are no citizen rescue requests to respond to right now.' : 'Requests you submit will appear here with their latest status.' }}</p>
+                    @if (auth()->user()->role === 'citizen')
                         <a href="{{ route('rescue-requests.create') }}" class="btn btn-danger">Submit a request</a>
                     @endif
                 </div>
@@ -39,7 +41,7 @@
                                 @foreach (['Reference', 'Contact', 'Location and emergency', 'People', 'Urgency', 'Status', 'Submitted'] as $heading)
                                     <th scope="col" class="text-nowrap small text-uppercase">{{ $heading }}</th>
                                 @endforeach
-                                @if (auth()->user()->role === 'admin')<th scope="col" class="text-nowrap small text-uppercase">Update status</th>@endif
+                                @if (in_array(auth()->user()->role, ['admin', 'volunteer'], true))<th scope="col" class="text-nowrap small text-uppercase">Update status</th>@endif
                             </tr>
                         </thead>
                         <tbody>
@@ -59,7 +61,7 @@
                                     <td><span class="badge {{ $rescueRequest->urgency === 'Critical' ? 'text-bg-danger' : ($rescueRequest->urgency === 'High' ? 'text-bg-warning' : 'text-bg-info') }}">{{ $rescueRequest->urgency }}</span></td>
                                     <td><span class="badge {{ ['Pending' => 'text-bg-secondary', 'In Progress' => 'text-bg-primary', 'Rescued' => 'text-bg-success'][$rescueRequest->status] }}">{{ $rescueRequest->status }}</span></td>
                                     <td class="text-nowrap small">{{ $rescueRequest->created_at->format('M j, Y g:i A') }}</td>
-                                    @if (auth()->user()->role === 'admin')
+                                    @if (in_array(auth()->user()->role, ['admin', 'volunteer'], true))
                                         <td>
                                             <form method="POST" action="{{ route('rescue-requests.status', $rescueRequest) }}" class="d-flex gap-2">
                                                 @csrf @method('PATCH')
@@ -72,6 +74,20 @@
                                             </form>
                                         </td>
                                     @endif
+                                </tr>
+                                <tr class="table-light">
+                                    <td colspan="{{ in_array(auth()->user()->role, ['admin', 'volunteer'], true) ? 8 : 7 }}">
+                                        <details>
+                                            <summary class="small fw-semibold">Request activity ({{ $rescueRequest->activities->count() }})</summary>
+                                            <div class="d-flex flex-column gap-2 mt-2">
+                                                @forelse ($rescueRequest->activities->sortByDesc('created_at') as $activity)
+                                                    <div class="small text-secondary">{{ $activity->created_at->format('M j, Y g:i A') }} — <strong>{{ $activity->user?->name ?? 'System' }}</strong>@if ($activity->user) ({{ ucfirst($activity->user->role) }})@endif: {{ $activity->note }}@if ($activity->from_status && $activity->to_status) <span class="badge text-bg-light">{{ $activity->from_status }} → {{ $activity->to_status }}</span>@endif</div>
+                                                @empty
+                                                    <div class="small text-secondary">No activity has been recorded yet.</div>
+                                                @endforelse
+                                            </div>
+                                        </details>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

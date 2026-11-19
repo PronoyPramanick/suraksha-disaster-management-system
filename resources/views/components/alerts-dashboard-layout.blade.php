@@ -32,13 +32,15 @@
                 </button>
                 <nav class="alerts-primary-nav" aria-label="Primary navigation">
                     <a href="{{ route('dashboard') }}" @if (request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a>
+                    @if ($isAdmin)<a href="{{ route('admin.panel') }}" @if (request()->routeIs('admin.panel')) aria-current="page" @endif>Admin</a>@endif
                     <a href="{{ route('alerts.index') }}" @if (request()->routeIs('alerts.*')) aria-current="page" @endif>News &amp; Alerts</a>
-                    <a href="{{ route('rescue-requests.index') }}" @if (request()->routeIs('rescue-requests.*')) aria-current="page" @endif>Rescue Requests</a>
+                    <a href="{{ route('rescue-requests.index') }}" @if (request()->routeIs('rescue-requests.*')) aria-current="page" @endif>{{ auth()->user()->role === 'volunteer' ? 'Citizen Requests' : 'Rescue Requests' }}</a>
                 </nav>
                 <nav class="alerts-quick-nav" aria-label="Quick navigation" x-show="mobileSidebarOpen" x-cloak x-on:click.outside="mobileSidebarOpen = false" x-on:click="mobileSidebarOpen = false">
                     <a href="{{ route('dashboard') }}" @if (request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a>
+                    @if ($isAdmin)<a href="{{ route('admin.panel') }}" @if (request()->routeIs('admin.panel')) aria-current="page" @endif>Admin Panel</a>@endif
                     <a href="{{ route('alerts.index') }}" @if (request()->routeIs('alerts.*')) aria-current="page" @endif>Disaster News &amp; Alerts</a>
-                    <a href="{{ route('rescue-requests.index') }}" @if (request()->routeIs('rescue-requests.*')) aria-current="page" @endif>Rescue Request Tracker</a>
+                    <a href="{{ route('rescue-requests.index') }}" @if (request()->routeIs('rescue-requests.*')) aria-current="page" @endif>{{ auth()->user()->role === 'volunteer' ? 'Citizen Requests' : 'Rescue Request Tracker' }}</a>
                     <a href="{{ route('affected-areas.index') }}" @if (request()->routeIs('affected-areas.*')) aria-current="page" @endif>Affected Areas</a>
                     <a href="{{ route('map.index') }}" @if (request()->routeIs('map.*')) aria-current="page" @endif>Incident Map</a>
                 </nav>

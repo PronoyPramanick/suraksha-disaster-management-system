@@ -13,13 +13,16 @@
             <div class="navbar-nav me-auto mb-2 mb-lg-0">
                 <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">Dashboard</x-nav-link>
                 <x-nav-link :href="route('affected-areas.index')" :active="request()->routeIs('affected-areas.*')">Affected Areas</x-nav-link>
+                @if (auth()->user()->role === 'admin')
+                    <x-nav-link :href="route('admin.panel')" :active="request()->routeIs('admin.panel')">Admin Panel</x-nav-link>
+                @endif
                 <x-nav-link :href="route('alerts.index')" :active="request()->routeIs('alerts.*')">
                     {{ auth()->user()->role === 'admin' ? __('Disaster News & Alerts') : __('View Disaster News & Alerts') }}
                 </x-nav-link>
                 <x-nav-link :href="route('missing-persons.index')" :active="request()->routeIs('missing-persons.*')">Missing Persons</x-nav-link>
                 <x-nav-link :href="route(in_array(auth()->user()->role, ['admin', 'volunteer'], true) ? 'volunteers.index' : 'volunteers.create')" :active="request()->routeIs('volunteers.*')">Volunteers</x-nav-link>
                 <x-nav-link :href="route('rescue-requests.index')" :active="request()->routeIs('rescue-requests.*')">
-                    {{ auth()->user()->role === 'admin' ? __('Rescue Requests') : __('My Rescue Requests') }}
+                    {{ auth()->user()->role === 'admin' ? __('Rescue Requests') : (auth()->user()->role === 'volunteer' ? __('Citizen Requests') : __('My Rescue Requests')) }}
                 </x-nav-link>
             </div>
 

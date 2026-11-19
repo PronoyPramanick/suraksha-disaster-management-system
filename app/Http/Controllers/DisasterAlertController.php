@@ -73,7 +73,7 @@ class DisasterAlertController extends Controller
         $status = request('status');
         $search = trim((string) request('q', ''));
 
-        $query = DisasterAlert::query()->latest('published_at');
+        $query = DisasterAlert::query()->with(['author', 'lastEditor'])->latest('published_at');
 
         if (in_array($category, ['cyclone', 'flood', 'storm', 'shelter', 'health', 'rescue', 'fire', 'earthquake', 'landslide', 'river_level', 'general'], true)) {
             $query->where('category', $category);
@@ -99,8 +99,9 @@ class DisasterAlertController extends Controller
         $alerts = $query->paginate(5)->withQueryString();
 
         $rescueRequests = \App\Models\RescueRequest::query()
-            ->with('user')
-            ->when($request->user()->role !== 'admin', fn ($builder) => $builder->where('user_id', $request->user()->id))
+            ->with(['user', 'activities.user'])
+            ->when($request->user()->role === 'volunteer', fn ($builder) => $builder->whereHas('user', fn ($userQuery) => $userQuery->where('role', 'citizen')))
+            ->when($request->user()->role === 'citizen', fn ($builder) => $builder->where('user_id', $request->user()->id))
             ->latest('updated_at')
             ->paginate(5, ['*'], 'requests_page')
             ->withQueryString();
@@ -120,28 +121,36 @@ class DisasterAlertController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $alert = DisasterAlert::create($this->validatedData($request));
+        $alert = DisasterAlert::create($this->validatedData($request) + ['created_by' => $request->user()->id]);
 
         return redirect()->route('alerts.show', $alert)->with('status', 'News or alert published.');
     }
 
     public function edit(DisasterAlert $alert): View
     {
+        $this->authorizeContribution($alert, request());
         return view('alerts.edit', compact('alert'));
     }
 
     public function update(Request $request, DisasterAlert $alert): RedirectResponse
     {
-        $alert->update($this->validatedData($request));
+        $this->authorizeContribution($alert, $request);
+        $alert->update($this->validatedData($request) + ['updated_by' => $request->user()->id]);
 
         return redirect()->route('alerts.show', $alert)->with('status', 'News or alert updated.');
     }
 
     public function destroy(DisasterAlert $alert): RedirectResponse
     {
+        $this->authorizeContribution($alert, request());
         $alert->delete();
 
         return redirect()->route('alerts.index')->with('status', 'News or alert deleted.');
+    }
+
+    private function authorizeContribution(DisasterAlert $alert, Request $request): void
+    {
+        abort_unless($request->user()->role === 'admin' || $alert->created_by === $request->user()->id, 403);
     }
 
     private function validatedData(Request $request): array

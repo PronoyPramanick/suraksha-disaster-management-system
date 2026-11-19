@@ -1,7 +1,7 @@
 <x-alerts-dashboard-layout>
     <div class="alerts-dashboard-heading">
         <div class="alerts-heading-copy"><span class="alerts-heading-icon">◖</span><div><h1>Disaster News &amp; Alerts</h1><p>Stay informed with the latest disaster alerts and important announcements across Bangladesh.</p></div></div>
-        @if (auth()->user()->role === 'admin')<a class="alerts-new-button" href="{{ route('alerts.create') }}"><span>＋</span>Create New Alert</a>@endif
+        <a class="alerts-new-button" href="{{ route('alerts.create') }}"><span>＋</span>Share News or Alert</a>
     </div>
 
     <section class="alerts-summary-grid" aria-label="Alert overview">
@@ -29,12 +29,13 @@
                     <div class="result-badges"><span class="result-severity result-severity-{{ $alert->severity }}">{{ strtoupper($alert->severity) }}</span><span class="result-type">{{ Str::headline($alert->category) }}</span></div>
                     <h2><a href="{{ route('alerts.show', $alert) }}">{{ $alert->title }}</a></h2>
                     <p>{{ $alert->summary }}</p>
+                    <small class="d-block text-secondary">Shared by {{ $alert->author?->name ?? 'SURAKSHA team' }}@if ($alert->lastEditor) · Updated by {{ $alert->lastEditor->name }}@endif</small>
                 </div>
                 <div class="result-location"><strong><span>⌖</span>{{ $alert->location }}</strong><small>{{ $alert->affected_area ?: 'Affected area not specified' }}</small><time datetime="{{ $alert->published_at->toIso8601String() }}">▣ &nbsp;{{ $alert->published_at->format('M j, Y · g:i A') }}</time></div>
                 <span class="result-status result-status-{{ $alert->status }}">{{ Str::headline($alert->status) }}</span>
                 <div class="result-actions">
                     <a class="result-view-button" href="{{ route('alerts.show', $alert) }}">◉ &nbsp;View Details</a>
-                    @if (auth()->user()->role === 'admin')
+                    @if (auth()->user()->role === 'admin' || $alert->created_by === auth()->id())
                         <a class="result-edit-button" href="{{ route('alerts.edit', $alert) }}" aria-label="Edit {{ $alert->title }}">✎ <span>Edit</span></a>
                         <form method="POST" action="{{ route('alerts.destroy', $alert) }}" onsubmit="return confirm('Delete this alert?')">@csrf @method('DELETE')<button class="result-delete-button" type="submit" aria-label="Delete {{ $alert->title }}">♲ <span>Delete</span></button></form>
                     @else

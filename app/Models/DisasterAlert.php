@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DisasterAlert extends Model
 {
@@ -20,6 +21,8 @@ class DisasterAlert extends Model
         'safety_instructions',
         'status',
         'published_at',
+        'created_by',
+        'updated_by',
     ];
 
     protected function casts(): array
@@ -29,5 +32,15 @@ class DisasterAlert extends Model
             'latitude' => 'float',
             'longitude' => 'float',
         ];
+    }
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function lastEditor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

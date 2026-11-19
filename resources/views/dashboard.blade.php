@@ -3,18 +3,25 @@
         <h1 class="h3 mb-0">{{ __('Dashboard') }}</h1>
     </x-slot>
 
-    <div class="container-xl py-4">
-        <div class="dashboard-welcome-card card border-0 shadow-sm">
-            <div class="card-body p-4 p-lg-5">
-                <span class="map-eyebrow"><span class="map-live-dot"></span> COMMUNITY RESPONSE PLATFORM</span>
-                <h2 class="h3 mt-3 mb-2">Welcome, {{ Auth::user()->name }}</h2>
-                <p class="text-secondary mb-4">{{ __('Coordinate disaster information and community response from one place.') }}</p>
-
-                <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-success" href="{{ route('alerts.index') }}">{{ auth()->user()->role === 'admin' ? __('Disaster News & Alerts') : __('View Disaster News & Alerts') }}</a>
-                    <a class="btn btn-outline-success" href="{{ route('rescue-requests.index') }}">{{ auth()->user()->role === 'admin' ? __('Manage Rescue Requests') : __('My Rescue Requests') }}</a>
-                    <a class="btn btn-outline-success" href="{{ route('missing-persons.index') }}">Missing Person Reports</a>
-                    <a class="btn btn-outline-success" href="{{ route(in_array(auth()->user()->role, ['admin', 'volunteer'], true) ? 'volunteers.index' : 'volunteers.create') }}">{{ auth()->user()->role === 'admin' ? 'Review Volunteer Applications' : (auth()->user()->role === 'volunteer' ? 'My Volunteer Application' : 'Apply to Volunteer') }}</a>
+    <div class="container-xl py-4 py-lg-5">
+        <section class="dashboard-hero mb-4">
+            <div class="dashboard-hero-copy">
+                <span class="dashboard-live-label"><i></i> COMMUNITY RESPONSE</span>
+                <h2>Prepared, informed, and ready to help.</h2>
+                <p>Find verified disaster updates, request urgent assistance, and follow response progress from one place.</p>
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <a class="btn btn-light fw-semibold" href="{{ route('alerts.index') }}">View disaster alerts <span aria-hidden="true">→</span></a>
+                    @if ($user->role === 'admin')
+                        <a class="btn btn-outline-light" href="{{ route('admin.panel') }}">Open admin panel</a>
+                        <a class="btn btn-outline-light" href="{{ route('rescue-requests.index') }}">Manage rescue requests</a>
+                    @elseif ($user->role === 'volunteer')
+                        <a class="btn btn-outline-light" href="{{ route('rescue-requests.index') }}">View citizen requests</a>
+                    @else
+                        <a class="btn btn-outline-light" href="{{ route('rescue-requests.create') }}">Request assistance</a>
+                    @endif
+                    <a class="btn btn-outline-light" href="{{ route('missing-persons.index') }}">Missing person reports</a>
+                    <a class="btn btn-outline-light" href="{{ route(in_array($user->role, ['admin', 'volunteer'], true) ? 'volunteers.index' : 'volunteers.create') }}">{{ $user->role === 'admin' ? 'Volunteer applications' : ($user->role === 'volunteer' ? 'My volunteer application' : 'Apply to volunteer') }}</a>
+                    <a class="btn btn-outline-light" href="{{ route('affected-areas.index') }}">Affected areas</a>
                 </div>
             </div>
             <div class="dashboard-hero-aside" aria-label="Response snapshot">
