@@ -27,6 +27,21 @@
 
         <div class="alerts-main-column">
             <header class="alerts-topbar">
+                <button class="alerts-menu-button" type="button" aria-label="Open navigation menu" x-on:click="mobileSidebarOpen = !mobileSidebarOpen" x-bind:aria-expanded="mobileSidebarOpen.toString()">
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </button>
+                <nav class="alerts-primary-nav" aria-label="Primary navigation">
+                    <a href="{{ route('dashboard') }}" @if (request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a>
+                    <a href="{{ route('alerts.index') }}" @if (request()->routeIs('alerts.*')) aria-current="page" @endif>News &amp; Alerts</a>
+                    <a href="{{ route('rescue-requests.index') }}" @if (request()->routeIs('rescue-requests.*')) aria-current="page" @endif>Rescue Requests</a>
+                </nav>
+                <nav class="alerts-quick-nav" aria-label="Quick navigation" x-show="mobileSidebarOpen" x-cloak x-on:click.outside="mobileSidebarOpen = false" x-on:click="mobileSidebarOpen = false">
+                    <a href="{{ route('dashboard') }}" @if (request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a>
+                    <a href="{{ route('alerts.index') }}" @if (request()->routeIs('alerts.*')) aria-current="page" @endif>Disaster News &amp; Alerts</a>
+                    <a href="{{ route('rescue-requests.index') }}" @if (request()->routeIs('rescue-requests.*')) aria-current="page" @endif>Rescue Request Tracker</a>
+                    <a href="{{ route('affected-areas.index') }}" @if (request()->routeIs('affected-areas.*')) aria-current="page" @endif>Affected Areas</a>
+                    <a href="{{ route('map.index') }}" @if (request()->routeIs('map.*')) aria-current="page" @endif>Incident Map</a>
+                </nav>
                 <form class="alerts-global-search" method="GET" action="{{ route('alerts.index') }}"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="8.7" cy="8.7" r="5.7" stroke="currentColor" stroke-width="1.5"/><path d="m13 13 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input type="search" name="q" value="{{ request('q') }}" placeholder="Search alerts, locations..." aria-label="Search alerts and locations"></form>
                 <button class="alerts-notification-button" type="button" aria-label="Notifications"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M15.5 7.8a5.5 5.5 0 0 0-11 0c0 6-2 6-2 7.2h15c0-1.2-2-1.2-2-7.2ZM8 17h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><i></i></button>
                 <details class="alerts-user-menu"><summary><span class="alerts-user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span><span class="alerts-user-label"><strong>{{ $isAdmin ? 'Admin' : auth()->user()->name }}</strong></span><span class="alerts-user-chevron">⌄</span></summary><div class="alerts-user-dropdown"><a href="{{ route('dashboard') }}">Dashboard</a><a href="{{ route('profile.edit') }}">Profile</a><form method="POST" action="{{ route('logout') }}">@csrf<button type="submit">Sign out</button></form></div></details>

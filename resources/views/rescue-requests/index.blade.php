@@ -1,14 +1,84 @@
 <x-app-layout>
-    <x-slot name="header"><div class="flex flex-wrap items-center justify-between gap-3"><h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ auth()->user()->role === 'admin' ? 'Rescue Requests' : 'My Rescue Requests' }}</h2>@if (auth()->user()->role !== 'admin')<a href="{{ route('rescue-requests.create') }}" class="rounded-md bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-800">Request assistance</a>@endif</div></x-slot>
-    <div class="py-10"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        @if (session('status'))<div class="mb-5 rounded-md bg-green-50 p-4 text-green-800" role="status">{{ session('status') }}</div>@endif
-        @if (session('rescue_request_reference'))<div class="mb-5 rounded-md border border-blue-200 bg-blue-50 p-4 text-blue-900">Your new request reference is <strong>#{{ session('rescue_request_reference') }}</strong>. Save this number to identify your request.</div>@endif
-        @if (auth()->user()->role === 'admin')<p class="mb-5 text-sm text-gray-600">Review incoming requests and update their response status. Contact details are visible to authorized administrators.</p>@endif
-        <div class="overflow-hidden rounded-lg bg-white shadow-sm">
-            @if ($requests->isEmpty())<div class="p-10 text-center"><h3 class="text-lg font-semibold text-gray-900">No rescue requests yet</h3><p class="mt-2 text-gray-600">Requests you submit will appear here with their latest status.</p>@if (auth()->user()->role !== 'admin')<a href="{{ route('rescue-requests.create') }}" class="mt-5 inline-block font-semibold text-red-700 hover:text-red-900">Submit a request</a>@endif</div>
-            @else<div class="overflow-x-auto"><table class="min-w-full divide-y divide-gray-200"><thead class="bg-gray-50"><tr>@foreach (['Reference', 'Contact', 'Location', 'People', 'Urgency', 'Status', 'Submitted'] as $heading)<th scope="col" class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{{ $heading }}</th>@endforeach @if (auth()->user()->role === 'admin')<th scope="col" class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Update status</th>@endif</tr></thead><tbody class="divide-y divide-gray-200 bg-white">
-                @foreach ($requests as $rescueRequest)<tr class="align-top"><td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-900">#{{ $rescueRequest->id }}</td><td class="px-5 py-4"><div class="font-medium text-gray-900">{{ $rescueRequest->contact_name }}</div><div class="text-sm text-gray-600">{{ $rescueRequest->contact_phone }}</div>@if (auth()->user()->role === 'admin')<div class="text-xs text-gray-500">{{ $rescueRequest->user->email }}</div>@endif</td><td class="max-w-xs px-5 py-4"><div class="text-gray-900">{{ $rescueRequest->location }}</div><p class="mt-1 whitespace-pre-line text-sm text-gray-600">{{ $rescueRequest->description }}</p></td><td class="px-5 py-4 text-gray-700">{{ $rescueRequest->people_count }}</td><td class="px-5 py-4"><span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $rescueRequest->urgency === 'Critical' ? 'bg-red-100 text-red-800' : ($rescueRequest->urgency === 'High' ? 'bg-orange-100 text-orange-800' : 'bg-yellow-100 text-yellow-800') }}">{{ $rescueRequest->urgency }}</span></td><td class="whitespace-nowrap px-5 py-4"><span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ ['Pending' => 'bg-gray-100 text-gray-800', 'In Progress' => 'bg-blue-100 text-blue-800', 'Rescued' => 'bg-green-100 text-green-800'][$rescueRequest->status] }}">{{ $rescueRequest->status }}</span></td><td class="whitespace-nowrap px-5 py-4 text-sm text-gray-600">{{ $rescueRequest->created_at->format('M j, Y g:i A') }}</td>@if (auth()->user()->role === 'admin')<td class="px-5 py-4"><form method="POST" action="{{ route('rescue-requests.status', $rescueRequest) }}" class="flex min-w-48 gap-2">@csrf @method('PATCH')<select name="status" aria-label="Status for request #{{ $rescueRequest->id }}" class="rounded-md border-gray-300 text-sm"><option value="Pending" @selected($rescueRequest->status === 'Pending')>Pending</option><option value="In Progress" @selected($rescueRequest->status === 'In Progress')>In Progress</option><option value="Rescued" @selected($rescueRequest->status === 'Rescued')>Rescued</option></select><button class="rounded-md bg-gray-800 px-3 py-2 text-xs font-semibold text-white hover:bg-gray-700">Save</button></form></td>@endif</tr>@endforeach
-            </tbody></table></div><div class="border-t border-gray-200 p-4">{{ $requests->links() }}</div>@endif
+    <x-slot name="header">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <span class="map-eyebrow">EMERGENCY RESPONSE</span>
+                <h1 class="h3 mb-0 mt-2">{{ auth()->user()->role === 'admin' ? 'Rescue Requests' : 'My Rescue Requests' }}</h1>
+            </div>
+            @if (auth()->user()->role !== 'admin')
+                <a href="{{ route('rescue-requests.create') }}" class="btn btn-danger">Request assistance</a>
+            @endif
         </div>
-    </div></div>
+    </x-slot>
+
+    <div class="container-xl py-4">
+        @if (session('status'))
+            <div class="alert alert-success" role="status">{{ session('status') }}</div>
+        @endif
+        @if (session('rescue_request_reference'))
+            <div class="alert alert-info" role="status">Your new request reference is <strong>#{{ session('rescue_request_reference') }}</strong>. Save this number to identify your request.</div>
+        @endif
+        @if (auth()->user()->role === 'admin')
+            <p class="text-secondary mb-4">Review incoming requests and update their response status. Contact details are visible to authorized administrators.</p>
+        @endif
+
+        <div class="card border-0 shadow-sm">
+            @if ($requests->isEmpty())
+                <div class="card-body p-5 text-center">
+                    <h2 class="h5">No rescue requests yet</h2>
+                    <p class="text-secondary mb-4">Requests you submit will appear here with their latest status.</p>
+                    @if (auth()->user()->role !== 'admin')
+                        <a href="{{ route('rescue-requests.create') }}" class="btn btn-danger">Submit a request</a>
+                    @endif
+                </div>
+            @else
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                @foreach (['Reference', 'Contact', 'Location and emergency', 'People', 'Urgency', 'Status', 'Submitted'] as $heading)
+                                    <th scope="col" class="text-nowrap small text-uppercase">{{ $heading }}</th>
+                                @endforeach
+                                @if (auth()->user()->role === 'admin')<th scope="col" class="text-nowrap small text-uppercase">Update status</th>@endif
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($requests as $rescueRequest)
+                                <tr>
+                                    <td class="text-nowrap fw-semibold">#{{ $rescueRequest->id }}</td>
+                                    <td>
+                                        <div class="fw-semibold">{{ $rescueRequest->contact_name }}</div>
+                                        <a class="small text-secondary" href="tel:{{ $rescueRequest->contact_phone }}">{{ $rescueRequest->contact_phone }}</a>
+                                        @if (auth()->user()->role === 'admin')<div class="small text-secondary">{{ $rescueRequest->user->email }}</div>@endif
+                                    </td>
+                                    <td class="rescue-request-description">
+                                        <div class="fw-semibold">{{ $rescueRequest->location }}</div>
+                                        <p class="small text-secondary mb-0 mt-1">{{ $rescueRequest->description }}</p>
+                                    </td>
+                                    <td>{{ $rescueRequest->people_count }}</td>
+                                    <td><span class="badge {{ $rescueRequest->urgency === 'Critical' ? 'text-bg-danger' : ($rescueRequest->urgency === 'High' ? 'text-bg-warning' : 'text-bg-info') }}">{{ $rescueRequest->urgency }}</span></td>
+                                    <td><span class="badge {{ ['Pending' => 'text-bg-secondary', 'In Progress' => 'text-bg-primary', 'Rescued' => 'text-bg-success'][$rescueRequest->status] }}">{{ $rescueRequest->status }}</span></td>
+                                    <td class="text-nowrap small">{{ $rescueRequest->created_at->format('M j, Y g:i A') }}</td>
+                                    @if (auth()->user()->role === 'admin')
+                                        <td>
+                                            <form method="POST" action="{{ route('rescue-requests.status', $rescueRequest) }}" class="d-flex gap-2">
+                                                @csrf @method('PATCH')
+                                                <select name="status" aria-label="Status for request #{{ $rescueRequest->id }}" class="form-select form-select-sm">
+                                                    <option value="Pending" @selected($rescueRequest->status === 'Pending')>Pending</option>
+                                                    <option value="In Progress" @selected($rescueRequest->status === 'In Progress')>In Progress</option>
+                                                    <option value="Rescued" @selected($rescueRequest->status === 'Rescued')>Rescued</option>
+                                                </select>
+                                                <button class="btn btn-sm btn-dark" type="submit">Save</button>
+                                            </form>
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white">{{ $requests->links('pagination::bootstrap-5') }}</div>
+            @endif
+        </div>
+    </div>
 </x-app-layout>

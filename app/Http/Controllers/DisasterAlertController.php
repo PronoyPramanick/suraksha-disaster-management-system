@@ -21,7 +21,7 @@ class DisasterAlertController extends Controller
         return view('affected-areas.index', ['areas' => $query->paginate(10)->withQueryString(), 'search' => $search, 'category' => $category, 'severity' => $severity]);
     }
 
-    public function index(): View
+    public function index(Request $request): View
     {
         $totalAlerts = DisasterAlert::count();
         $activeAlerts = DisasterAlert::where('status', 'active')->count();
@@ -58,7 +58,14 @@ class DisasterAlertController extends Controller
 
         $alerts = $query->paginate(5)->withQueryString();
 
-        return view('alerts.dashboard-index', compact('alerts', 'totalAlerts', 'activeAlerts', 'resolvedAlerts', 'lastUpdated', 'category', 'severity', 'status', 'search'));
+        $rescueRequests = \App\Models\RescueRequest::query()
+            ->with('user')
+            ->when($request->user()->role !== 'admin', fn ($builder) => $builder->where('user_id', $request->user()->id))
+            ->latest('updated_at')
+            ->paginate(5, ['*'], 'requests_page')
+            ->withQueryString();
+
+        return view('alerts.dashboard-index', compact('alerts', 'rescueRequests', 'totalAlerts', 'activeAlerts', 'resolvedAlerts', 'lastUpdated', 'category', 'severity', 'status', 'search'));
     }
 
     public function show(DisasterAlert $alert): View

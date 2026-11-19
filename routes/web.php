@@ -3,17 +3,30 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DisasterAlertController;
 use App\Http\Controllers\RescueRequestController;
+use App\Models\DisasterAlert;
+use App\Models\RescueRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::view('/map', 'map.index')->name('map.index');
 Route::get('/affected-areas', [DisasterAlertController::class, 'affectedAreas'])->name('affected-areas.index');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboard', function (Request $request) {
+    $user = $request->user();
+    $requestQuery = RescueRequest::query()
+        ->when($user->role !== 'admin', fn ($query) => $query->where('user_id', $user->id));
+
+    $activeAlerts = DisasterAlert::query()->where('kind', 'alert')->where('status', 'active')->count();
+    $rescueRequestCount = (clone $requestQuery)->count();
+    $pendingRequestCount = (clone $requestQuery)->where('status', 'Pending')->count();
+    $recentRequests = (clone $requestQuery)->latest('updated_at')->limit(4)->get();
+    $recentAlerts = DisasterAlert::query()->where('kind', 'alert')->latest('published_at')->limit(3)->get();
+
+    return view('dashboard', compact('user', 'activeAlerts', 'rescueRequestCount', 'pendingRequestCount', 'recentRequests', 'recentAlerts'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -47,5 +47,57 @@
         @endforelse
     </section>
 
+    <section class="rescue-alert-tracker" aria-labelledby="rescue-alert-tracker-title">
+        <div class="rescue-alert-tracker-heading">
+            <div>
+                <span class="alerts-eyebrow">LIVE RESPONSE</span>
+                <h2 id="rescue-alert-tracker-title">Rescue Request Tracker</h2>
+                <p>New requests and status changes appear here. Requests are visible only to their owner and authorized administrators.</p>
+            </div>
+            <a href="{{ route('rescue-requests.index') }}">Open full tracker <span aria-hidden="true">→</span></a>
+        </div>
+
+        @if (session('status'))<div class="alert-flash" role="status">{{ session('status') }}</div>@endif
+
+        @forelse ($rescueRequests as $rescueRequest)
+            <article class="rescue-alert-card">
+                <div class="rescue-alert-card-main">
+                    <div class="rescue-alert-meta">
+                        <strong>Request #{{ $rescueRequest->id }}</strong>
+                        <span class="rescue-request-status status-{{ \Illuminate\Support\Str::slug($rescueRequest->status) }}">{{ $rescueRequest->status }}</span>
+                        <span class="rescue-request-priority priority-{{ strtolower($rescueRequest->urgency) }}">{{ $rescueRequest->urgency }} urgency</span>
+                    </div>
+                    <h3>{{ $rescueRequest->location }}</h3>
+                    <p>{{ $rescueRequest->description }}</p>
+                    <div class="rescue-alert-details">
+                        <span>{{ $rescueRequest->people_count === 1 ? '1 person needs assistance' : $rescueRequest->people_count.' people need assistance' }}</span>
+                        @if (auth()->user()->role === 'admin')
+                            <span>Contact: {{ $rescueRequest->contact_name }} · {{ $rescueRequest->contact_phone }}</span>
+                        @endif
+                        <time datetime="{{ $rescueRequest->updated_at->toIso8601String() }}">Updated {{ $rescueRequest->updated_at->diffForHumans() }}</time>
+                    </div>
+                </div>
+                @if (auth()->user()->role === 'admin')
+                    <form method="POST" action="{{ route('rescue-requests.status', $rescueRequest) }}" class="rescue-alert-update">
+                        @csrf @method('PATCH')
+                        <label class="visually-hidden" for="rescue-status-{{ $rescueRequest->id }}">Update status for request #{{ $rescueRequest->id }}</label>
+                        <select id="rescue-status-{{ $rescueRequest->id }}" name="status" class="form-select form-select-sm">
+                            @foreach (['Pending', 'In Progress', 'Rescued'] as $requestStatus)
+                                <option value="{{ $requestStatus }}" @selected($rescueRequest->status === $requestStatus)>{{ $requestStatus }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                    </form>
+                @endif
+            </article>
+        @empty
+            <div class="rescue-alert-empty">No rescue requests to track yet.</div>
+        @endforelse
+
+        @if ($rescueRequests->hasPages())
+            <div class="rescue-alert-pagination">{{ $rescueRequests->links('pagination::bootstrap-5') }}</div>
+        @endif
+    </section>
+
     <footer class="alerts-list-footer"><span>Showing {{ $alerts->firstItem() ?? 0 }}–{{ $alerts->lastItem() ?? 0 }} of {{ $alerts->total() }} alerts</span><div>{{ $alerts->links() }}</div></footer>
 </x-alerts-dashboard-layout>
