@@ -26,9 +26,22 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'citi@gmail.com'],
+            [
+                'name' => 'Citizen Demo',
+                'role' => 'citizen',
+                'password' => '12345',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'role' => 'citizen',
+                'password' => 'password',
+            ]
+        );
     }
 }

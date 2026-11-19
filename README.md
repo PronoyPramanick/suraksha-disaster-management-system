@@ -106,6 +106,15 @@ php artisan storage:link
 
 You do not need to install or start a separate database server for SQLite.
 
+Seeding creates shared demo logins for local development:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@gmail.com` | `12345` |
+| Citizen | `citi@gmail.com` | `12345` |
+
+Friends who clone the repository should run `php artisan migrate --seed` to create these accounts in their own local database.
+
 #### Optional: Use MySQL instead
 
 1. Start MySQL from the XAMPP Control Panel.
