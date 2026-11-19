@@ -33,21 +33,25 @@
                                 <input id="contact_name" name="contact_name" required maxlength="120" value="{{ old('contact_name', auth()->user()->name) }}" class="form-control @error('contact_name') is-invalid @enderror" autocomplete="name">
                                 @error('contact_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
+
                             <div class="col-md-6">
                                 <label for="contact_phone" class="form-label">Contact phone</label>
                                 <input id="contact_phone" name="contact_phone" type="tel" required maxlength="30" value="{{ old('contact_phone', auth()->user()->phone) }}" class="form-control @error('contact_phone') is-invalid @enderror" autocomplete="tel">
                                 @error('contact_phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
+
                             <div class="col-12">
                                 <label for="location" class="form-label">Location <span class="text-secondary fw-normal">(district, area, landmark)</span></label>
                                 <input id="location" name="location" required maxlength="255" value="{{ old('location') }}" class="form-control @error('location') is-invalid @enderror" placeholder="e.g. Companiganj, near the cyclone shelter" autocomplete="street-address">
                                 @error('location')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
+
                             <div class="col-md-6">
                                 <label for="people_count" class="form-label">People needing assistance</label>
                                 <input id="people_count" name="people_count" type="number" min="1" max="5000" required value="{{ old('people_count', 1) }}" class="form-control @error('people_count') is-invalid @enderror">
                                 @error('people_count')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
+
                             <div class="col-md-6">
                                 <label for="urgency" class="form-label">Urgency</label>
                                 <select id="urgency" name="urgency" required class="form-select @error('urgency') is-invalid @enderror">
@@ -57,14 +61,19 @@
                                 </select>
                                 @error('urgency')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
+
                             <div class="col-12">
                                 <label for="description" class="form-label">Emergency description</label>
                                 <textarea id="description" name="description" rows="5" maxlength="5000" required class="form-control @error('description') is-invalid @enderror" placeholder="Describe the situation, hazards, and any urgent medical needs.">{{ old('description') }}</textarea>
                                 @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
+
                         <div class="d-flex flex-wrap align-items-center gap-3 mt-4 pt-3 border-top">
-                            <button type="submit" class="btn btn-danger btn-lg rescue-submit-button">Submit rescue request</button>
+                            <button type="submit" class="btn btn-danger btn-lg rescue-submit-button">
+                                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2.5 18 17H2L10 2.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 7v4m0 2.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                                Submit rescue request
+                            </button>
                             <a href="{{ route('rescue-requests.index') }}" class="btn btn-link text-secondary text-decoration-none">Cancel</a>
                             <span class="small text-secondary ms-md-auto">Please provide a phone number the team can reach.</span>
                         </div>

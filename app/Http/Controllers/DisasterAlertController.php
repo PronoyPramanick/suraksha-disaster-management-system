@@ -11,14 +11,54 @@ class DisasterAlertController extends Controller
 {
     public function affectedAreas(Request $request): View
     {
-        $query = DisasterAlert::query()->where('kind', 'alert')->where('status', 'active')->latest('published_at');
+        $query = DisasterAlert::query()
+            ->where('kind', 'alert')
+            ->where('status', 'active')
+            ->latest('published_at');
         $search = trim((string) $request->query('q', ''));
         $category = $request->query('category');
         $severity = $request->query('severity');
-        if ($search !== '') $query->where(fn ($q) => $q->where('location', 'like', "%{$search}%")->orWhere('affected_area', 'like', "%{$search}%")->orWhere('summary', 'like', "%{$search}%"));
-        if (in_array($category, ['cyclone','flood','storm','river_level','fire','earthquake','landslide','general'], true)) $query->where('category', $category);
-        if (in_array($severity, ['critical','high','moderate'], true)) $query->where('severity', $severity);
-        return view('affected-areas.index', ['areas' => $query->paginate(10)->withQueryString(), 'search' => $search, 'category' => $category, 'severity' => $severity]);
+
+        if ($search !== '') {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('location', 'like', "%{$search}%")
+                    ->orWhere('affected_area', 'like', "%{$search}%")
+                    ->orWhere('summary', 'like', "%{$search}%");
+            });
+        }
+
+        if (in_array($category, ['cyclone', 'flood', 'storm', 'river_level', 'fire', 'earthquake', 'landslide', 'general'], true)) {
+            $query->where('category', $category);
+        }
+
+        if (in_array($severity, ['critical', 'high', 'moderate'], true)) {
+            $query->where('severity', $severity);
+        }
+
+        $mapAreas = (clone $query)
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->get(['id', 'title', 'category', 'severity', 'location', 'affected_area', 'summary', 'latitude', 'longitude'])
+            ->map(fn (DisasterAlert $area) => [
+                'id' => $area->id,
+                'title' => $area->title,
+                'category' => $area->category,
+                'severity' => $area->severity,
+                'location' => $area->location,
+                'affected_area' => $area->affected_area,
+                'summary' => $area->summary,
+                'latitude' => $area->latitude,
+                'longitude' => $area->longitude,
+            ])
+            ->values();
+
+        return view('affected-areas.index', [
+            'areas' => $query->paginate(10)->withQueryString(),
+            'mapAreas' => $mapAreas,
+            'search' => $search,
+            'category' => $category,
+            'severity' => $severity,
+        ]);
     }
 
     public function index(Request $request): View

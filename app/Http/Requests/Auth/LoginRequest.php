@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,7 +29,9 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'login_type' => ['required', 'in:citizen,volunteer,admin'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'volunteer_id' => ['required_if:login_type,volunteer', 'nullable', 'string', 'max:100'],
             'password' => ['required', 'string'],
         ];
     }
@@ -42,11 +45,31 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $loginType = $this->string('login_type')->toString();
+        $email = Str::lower(trim((string) $this->input('email')));
+        $credentials = [
+            'email' => $email,
+            'role' => $loginType,
+            'password' => $this->input('password'),
+        ];
+
+        if ($loginType === 'volunteer') {
+            $volunteer = User::query()
+                ->where('email', $email)
+                ->where('volunteer_id', Str::upper(trim((string) $this->input('volunteer_id'))))
+                ->where('role', 'volunteer')
+                ->whereHas('volunteerApplication', fn ($query) => $query->where('status', 'Approved'))
+                ->first();
+
+            $credentials['email'] = $volunteer?->email ?? '';
+        }
+
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+            $errorField = $loginType === 'volunteer' ? 'volunteer_id' : 'email';
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                $errorField => trans('auth.failed'),
             ]);
         }
 
@@ -81,6 +104,11 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(implode('|', [
+            Str::lower($this->string('login_type')->toString()),
+            Str::lower($this->string('email')->toString()),
+            Str::upper($this->string('volunteer_id')->toString()),
+            $this->ip(),
+        ]));
     }
 }

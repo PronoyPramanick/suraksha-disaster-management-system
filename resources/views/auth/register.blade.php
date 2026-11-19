@@ -18,7 +18,7 @@
                     <div><h1 id="register-title">Create New Account</h1><p>Join SURAKSHA and be a part of a safer Bangladesh.</p></div>
                 </header>
 
-                <form method="POST" action="{{ route('register') }}" class="register-form" x-data="{ role: @js(old('role', 'citizen')) }">
+                <form method="POST" action="{{ route('register') }}" class="register-form">
                     @csrf
                     <div class="register-field">
                         <label for="name">Full Name</label>
@@ -50,27 +50,7 @@
                         <x-input-error :messages="$errors->get('password_confirmation')" class="field-error" />
                     </div>
 
-                    <fieldset class="role-fieldset">
-                        <legend>Register As</legend>
-                        <div class="role-choice-grid">
-                            <label class="role-choice" x-bind:class="role === 'citizen' ? 'selected' : ''">
-                                <input type="radio" name="role" value="citizen" x-model="role" @checked(old('role', 'citizen') === 'citizen')>
-                                <span class="choice-radio"></span><span class="choice-avatar citizen"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4" fill="currentColor"/><path d="M4 21v-2a8 8 0 0 1 16 0v2H4Z" fill="currentColor"/></svg></span><strong>Citizen</strong><small>Get information<br>and request help</small>
-                            </label>
-                            <label class="role-choice" x-bind:class="role === 'volunteer' ? 'selected' : ''">
-                                <input type="radio" name="role" value="volunteer" x-model="role" @checked(old('role') === 'volunteer')>
-                                <span class="choice-radio"></span><span class="choice-avatar volunteer"><svg viewBox="0 0 28 24" aria-hidden="true"><circle cx="9" cy="7" r="4" fill="currentColor"/><circle cx="20" cy="8" r="3.5" fill="currentColor"/><path d="M1 22v-2a8 8 0 0 1 16 0v2H1ZM16 15a6.5 6.5 0 0 1 10 5.5V22h-7v-2a9.9 9.9 0 0 0-3-5Z" fill="currentColor"/></svg></span><strong>Volunteer</strong><small>Join and support<br>relief efforts</small>
-                            </label>
-                        </div>
-                        <x-input-error :messages="$errors->get('role')" class="field-error" />
-                    </fieldset>
-
-                    <div class="volunteer-id-field" x-show="role === 'volunteer'" x-cloak>
-                        <label for="volunteer_id">Volunteer ID</label>
-                        <div class="register-input-wrap"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2.5" y="4" width="15" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="9" r="1.6" stroke="currentColor" stroke-width="1.4"/><path d="M4.7 13a2.3 2.3 0 0 1 4.6 0M11 8h4M11 11h4M11 14h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><input id="volunteer_id" type="text" name="volunteer_id" value="{{ old('volunteer_id') }}" placeholder="Enter your volunteer ID" x-bind:required="role === 'volunteer'" x-bind:disabled="role !== 'volunteer'" aria-describedby="volunteer-id-help volunteer-id-error"><span class="volunteer-info" title="Use the ID assigned by your volunteer organization">ⓘ</span></div>
-                        <p id="volunteer-id-help" class="volunteer-help">Required for volunteer registration.</p>
-                        <x-input-error id="volunteer-id-error" :messages="$errors->get('volunteer_id')" class="field-error" />
-                    </div>
+                    <p class="volunteer-registration-note">Want to volunteer? Create your account, then submit a volunteer application. Volunteer access is granted after administrator approval.</p>
 
                     <button class="register-submit" type="submit"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 9a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM1 18a6 6 0 0 1 12 0H1Zm14-9h2v3h3v2h-3v3h-2v-3h-3v-2h3V9Z"/></svg>Create Account</button>
                 </form>
